@@ -1,6 +1,6 @@
 package Classes
 
-class Candidate {
-    String cpf
+class Candidate extends Users {
+    int cpf
     int age
 }
