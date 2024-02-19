@@ -1,4 +1,9 @@
+import Actions.CandidatesActions
+
 class Menu {
+
+    CandidatesActions candidatesActions = new CandidatesActions()
+
     Scanner sc = new Scanner(System.in)
 
     String menu = """Digite a opção desejada: 
@@ -15,7 +20,7 @@ class Menu {
         while (op != 0) {
             switch (op){
                 case 1:
-                    println("Não implementado")
+                    candidatesActions.showCandidates()
                     break
                 case 2:
                     println("Não implementado")
