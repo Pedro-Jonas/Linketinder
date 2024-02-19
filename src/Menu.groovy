@@ -1,5 +1,3 @@
-
-
 class Menu {
     Scanner sc = new Scanner(System.in)
 
@@ -12,7 +10,7 @@ class Menu {
     void Start(){
         println menu
 
-        int op = sc.nextInt();
+        int op = sc.nextInt()
 
         while (op != 0) {
             switch (op){
@@ -23,7 +21,7 @@ class Menu {
                     println("Não implementado")
                     break
                 default:
-                    System.out.println("Digite uma opção válida")
+                    println("Digite uma opção válida")
                     break
             }
 
