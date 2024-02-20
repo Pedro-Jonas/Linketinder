@@ -13,7 +13,7 @@ class CandidatesActions {
 
     Candidate c2 = new Candidate(
             name: "João",
-            email: "joão@gmail.com",
+            email: "joao@gmail.com",
             cpf: 12312312392,
             age: 30, state: "Ceará",
             cep: 54324236,

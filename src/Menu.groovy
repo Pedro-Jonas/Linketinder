@@ -1,8 +1,10 @@
 import Actions.CandidatesActions
+import Actions.CompaniesActions
 
 class Menu {
 
     CandidatesActions candidatesActions = new CandidatesActions()
+    CompaniesActions companiesActions = new CompaniesActions()
 
     Scanner sc = new Scanner(System.in)
 
@@ -23,7 +25,7 @@ class Menu {
                     candidatesActions.showCandidates()
                     break
                 case 2:
-                    println("Não implementado")
+                    companiesActions.showCompanies()
                     break
                 default:
                     println("Digite uma opção válida")
