@@ -6,8 +6,8 @@ class Candidate extends Users {
 
     @Override
      String toString() {
-        return "{nome= ${getName()}, email=  ${getEmail()}," +
-                " CPF= $cpf, idade= $age, estado= ${getState()}," +
-                " CEP= ${getCep()}, descrição= ${getDescription()}}";
+        return "{\n nome= ${getName()},\n email=  ${getEmail()},\n" +
+                " CPF= $cpf,\n idade= $age,\n estado= ${getState()},\n" +
+                " CEP= ${getCep()},\n descrição= ${getDescription()}\n}\n";
     }
 }

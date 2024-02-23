@@ -6,8 +6,8 @@ class Company extends Users {
 
     @Override
     String toString() {
-        return "{nome= ${getName()}, email=  ${getEmail()}," +
-                " CNPJ= $cnpj, país= $county, estado= ${getState()}," +
-                " CEP= ${getCep()}, descrição= ${getDescription()}}";
+        return "{\n nome= ${getName()},\n email=  ${getEmail()},\n" +
+                " CNPJ= $cnpj,\n país= $county,\n estado= ${getState()},\n" +
+                " CEP= ${getCep()},\n descrição= ${getDescription()}\n}\n";
     }
 }
