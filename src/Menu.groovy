@@ -33,7 +33,7 @@ class Menu {
                     candidatesActions.newCandidate()
                     break
                 case 4:
-                    println "Não implementado"
+                    companiesActions.newCompany()
                     break
                 default:
                     println "Digite uma opção válida"

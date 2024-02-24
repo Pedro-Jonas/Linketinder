@@ -6,7 +6,6 @@ import org.junit.jupiter.api.*
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 
-
 class CompaniesActionsTest {
     private static CompaniesActions companiesActions
 

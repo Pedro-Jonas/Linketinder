@@ -2,7 +2,7 @@ package Classes
 
 class Company extends Users {
     String county
-    int cnpj
+    String cnpj
 
     @Override
     String toString() {
