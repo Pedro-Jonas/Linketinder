@@ -30,7 +30,7 @@ class Menu {
                     companiesActions.showCompanies()
                     break
                 case 3:
-                    println "Não implementado"
+                    candidatesActions.newCandidate()
                     break
                 case 4:
                     println "Não implementado"

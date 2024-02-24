@@ -1,7 +1,7 @@
 package Classes
 
 class Candidate extends Users {
-    int cpf
+    String cpf
     int age
 
     @Override

@@ -22,17 +22,19 @@ class CandidatesActionsTest {
     }
 
     @Test
-    void insertNewCandidate(){
+    void addNewCandidate(){
         Candidate c1 = new Candidate(
                 name: "Paulo",
                 email: "paulo@gmail.com",
-                cpf: 12312312392,age: 22,
-                state: "São Paulo", cep: 31324236,
+                cpf: "12312312392",
+                age: 22,
+                state: "São Paulo",
+                cep: 31324236,
                 description: "Olá, sou um profissional muito dedicado e aprendo facilmente novas tecnologias")
 
         int sizeOld = candidatesActions.countCandidates()
 
-        candidatesActions.newCandidade(c1)
+        candidatesActions.insertNewCandidate(c1)
 
         int sizeAtual = candidatesActions.countCandidates()
 
