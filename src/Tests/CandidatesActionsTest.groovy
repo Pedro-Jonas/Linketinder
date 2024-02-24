@@ -30,13 +30,13 @@ class CandidatesActionsTest {
                 cep: 31324236,
                 description: "Olá, sou um profissional muito dedicado e aprendo facilmente novas tecnologias")
 
-        int sizeOld = candidatesActions.countCandidates()
+        int oldSize = candidatesActions.countCandidates()
 
         candidatesActions.insertNewCandidate(c1)
 
-        int sizeAtual = candidatesActions.countCandidates()
+        int currentSize = candidatesActions.countCandidates()
 
-        assertEquals(sizeOld+1 , sizeAtual)
+        assertEquals(oldSize+1 , currentSize)
     }
 
 
