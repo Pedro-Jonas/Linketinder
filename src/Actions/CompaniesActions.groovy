@@ -11,11 +11,10 @@ class CompaniesActions {
     }
 
     int countCompanies() {
-        return 0
+        companies.size()
     }
 
-
     void insertNewCompany(Company company) {
-        println company
+        companies.add(company)
     }
 }
