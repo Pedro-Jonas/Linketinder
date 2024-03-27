@@ -5,7 +5,7 @@ Linketinder é uma plataforma inovadora que combina a familiaridade e a simplici
 
 ## Modelagem do Banco de Dados
 DB Designer
-<img src="./DB/modelagem_db.png">
+<img src="./DB/linketinder.png">
 ## COMO RODAR
 1. Faça o clone da apliação
 2. Navegue até o diretório `src`
