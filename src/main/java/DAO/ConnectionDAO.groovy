@@ -14,7 +14,6 @@ class ConnectionDAO {
             if (connection == null) {
                 println("Falha na tentativa de conexão com o banco de dados!")
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e)
         }

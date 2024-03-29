@@ -1,10 +1,8 @@
 import Actions.CandidatesActions
 import Actions.CompaniesActions
-import DAO.CandidateDAO
 
 class Menu {
 
-    CandidateDAO candidateDAO = new  CandidateDAO()
     CandidatesActions candidatesActions = new CandidatesActions()
     CompaniesActions companiesActions = new CompaniesActions()
 
@@ -15,6 +13,10 @@ class Menu {
     2 para Listar todas as empresas
     3 para inserir um novo candidato
     4 para inserir uma nova empresa
+    5 para deletar um candidado
+    6 pra deletar uma empresa
+    7 para atualizar um candidato
+    8 para atualizar uma empresa
     0 para encerrar
     __________________________________"""
 
@@ -26,7 +28,7 @@ class Menu {
         while (op != 0) {
             switch (op){
                 case 1:
-                    candidateDAO.showCandidates()
+                    candidatesActions.showCandidates()
                     break
                 case 2:
                     companiesActions.showCompanies()
@@ -36,6 +38,9 @@ class Menu {
                     break
                 case 4:
                     companiesActions.newCompany()
+                    break
+                case 5:
+                    candidatesActions.deleteCandidate()
                     break
                 default:
                     println "Digite uma opção válida"

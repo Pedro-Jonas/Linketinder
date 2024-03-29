@@ -1,13 +1,10 @@
 package Classes
 
-class Candidate extends Users {
-    String cpf
-    int age
+import groovy.sql.Sql
 
-    @Override
-     String toString() {
-        return "{\n nome= ${getName()},\n email=  ${getEmail()},\n" +
-                " CPF= $cpf,\n idade= $age,\n estado= ${getState()},\n" +
-                " CEP= ${getCep()},\n descrição= ${getDescription()}\n}\n";
-    }
+class Candidate extends Users {
+    String fristName
+    String lastName
+    Date dateOfBirth
+    String cpf
 }

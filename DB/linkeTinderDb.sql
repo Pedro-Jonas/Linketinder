@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS "candidates" (
 
 CREATE TABLE IF NOT EXISTS "skill" (
     "id" SERIAL NOT NULL UNIQUE,
-    "name" VARCHAR(50) NOT NULL,
+    "name" VARCHAR(50) NOT NULL UNIQUE,
     PRIMARY KEY ("id")
 );
 
@@ -64,48 +64,48 @@ CREATE TABLE IF NOT EXISTS "like" (
     PRIMARY KEY ("id")
 );
 
-ALTER TABLE "candidate_skill" ADD CONSTRAINT "candidate_skill_fk1" FOREIGN KEY ("candidate_id") REFERENCES "candidates"("id");
+ALTER TABLE "candidate_skill" ADD CONSTRAINT "candidate_skill_fk1" FOREIGN KEY ("candidate_id") REFERENCES "candidates"("id") ON DELETE CASCADE;
 
-ALTER TABLE "candidate_skill" ADD CONSTRAINT "candidate_skill_fk2" FOREIGN KEY ("skill_id") REFERENCES "skill"("id");
+ALTER TABLE "candidate_skill" ADD CONSTRAINT "candidate_skill_fk2" FOREIGN KEY ("skill_id") REFERENCES "skill"("id") ON DELETE CASCADE;
 
-ALTER TABLE "like" ADD CONSTRAINT "like_fk1" FOREIGN KEY ("candidate_id") REFERENCES "candidates"("id");
+ALTER TABLE "like" ADD CONSTRAINT "like_fk1" FOREIGN KEY ("candidate_id") REFERENCES "candidates"("id") ON DELETE CASCADE;
 
-ALTER TABLE "like" ADD CONSTRAINT "like_fk2" FOREIGN KEY ("companie_id") REFERENCES "companies"("id");
+ALTER TABLE "like" ADD CONSTRAINT "like_fk2" FOREIGN KEY ("companie_id") REFERENCES "companies"("id") ON DELETE CASCADE;
 
-ALTER TABLE "like" ADD CONSTRAINT "like_fk3" FOREIGN KEY ("job_vacancie_id") REFERENCES "job_vacancies"("id");
+ALTER TABLE "like" ADD CONSTRAINT "like_fk3" FOREIGN KEY ("job_vacancie_id") REFERENCES "job_vacancies"("id") ON DELETE CASCADE;
 
-ALTER TABLE "job_vacancies" ADD CONSTRAINT "job_vacancies_fk1" FOREIGN KEY ("companie_id") REFERENCES "companies"("id");
+ALTER TABLE "job_vacancies" ADD CONSTRAINT "job_vacancies_fk1" FOREIGN KEY ("companie_id") REFERENCES "companies"("id") ON DELETE CASCADE;
 
-ALTER TABLE "job_vacancies_skill" ADD CONSTRAINT "job_vacancies_skill_fk1" FOREIGN KEY ("job_vacancie_id") REFERENCES "job_vacancies"("id");
+ALTER TABLE "job_vacancies_skill" ADD CONSTRAINT "job_vacancies_skill_fk1" FOREIGN KEY ("job_vacancie_id") REFERENCES "job_vacancies"("id") ON DELETE CASCADE;
 
-ALTER TABLE "job_vacancies_skill" ADD CONSTRAINT "job_vacancies_skill_fk2" FOREIGN KEY ("skill_id") REFERENCES "skill"("id");
+ALTER TABLE "job_vacancies_skill" ADD CONSTRAINT "job_vacancies_skill_fk2" FOREIGN KEY ("skill_id") REFERENCES "skill"("id") ON DELETE CASCADE;
 
 -- inserindo os candidatos
 
 INSERT INTO candidates (frist_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Pedro Jonas', 'Nunes de Araújo', '19/07/2000', 'jonas@gmail.com', '111.111.111-11',
-        '	Brasil', '1111-111', 'Essa é a descrição', 'jonas1111');
+        '	Brasil', '11111-111', 'Essa é a descrição', 'jonas1111');
 
 INSERT INTO candidates (frist_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Maria Eduarda', 'Pereira', '20/08/2001','eduarda@gmail.com', '222.222.222-22',
-        '	Brasil', '2222-222', 'Essa é a descrição', 'duda2222');
+        '	Brasil', '22222-222', 'Essa é a descrição', 'duda2222');
 
 INSERT INTO candidates (frist_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Guilherme', 'de Araújo', '15/09/2002','guilherme@gmail.com', '333.333.333-33',
-        'Brasil', '3333-333', 'Essa é a descrição', 'gui3333');
+        'Brasil', '33333-333', 'Essa é a descrição', 'gui3333');
 
 INSERT INTO candidates (frist_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Elizane', 'Nunes', '31/07/1999','eliziane@gmail.com', '444.444.444-44',
-        'Brasil', '4444-444', 'Essa é a descrição', 'eli4444');
+        'Brasil', '44444-444', 'Essa é a descrição', 'eli4444');
 
 INSERT INTO candidates (frist_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Ednaldo', 'Caetano', '23/04/1983','ednaldo@gmail.com', '555.555.555-55',
-        'Brasil', '5555-555', 'Essa é a descrição', 'naldo5555');
+        'Brasil', '55555-555', 'Essa é a descrição', 'naldo5555');
 
 -- inserindo as skills
 
