@@ -1,6 +1,5 @@
 package Actions
 
-import Classes.Candidate
 import Classes.Company
 
 class CompaniesActions {

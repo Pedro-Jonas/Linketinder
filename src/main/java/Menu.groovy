@@ -1,8 +1,10 @@
 import Actions.CandidatesActions
 import Actions.CompaniesActions
+import DAO.CandidateDAO
 
 class Menu {
 
+    CandidateDAO candidateDAO = new  CandidateDAO()
     CandidatesActions candidatesActions = new CandidatesActions()
     CompaniesActions companiesActions = new CompaniesActions()
 
@@ -16,7 +18,7 @@ class Menu {
     0 para encerrar
     __________________________________"""
 
-    void Start(){
+    void Start() {
         println menu
 
         int op = sc.nextInt()
@@ -24,7 +26,7 @@ class Menu {
         while (op != 0) {
             switch (op){
                 case 1:
-                    candidatesActions.showCandidates()
+                    candidateDAO.showCandidates()
                     break
                 case 2:
                     companiesActions.showCompanies()
@@ -45,4 +47,6 @@ class Menu {
             op = sc.nextInt()
         }
     }
+
 }
+
