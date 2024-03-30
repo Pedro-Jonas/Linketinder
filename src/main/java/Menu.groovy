@@ -9,14 +9,14 @@ class Menu {
     Scanner sc = new Scanner(System.in)
 
     String menu = """Digite a opção desejada: 
-    1 para listar todos os candidatos
-    2 para Listar todas as empresas
-    3 para inserir um novo candidato
-    4 para inserir uma nova empresa
-    5 para deletar um candidado
-    6 pra deletar uma empresa
-    7 para atualizar um candidato
-    8 para atualizar uma empresa
+    1 para inserir um novo candidato 
+    2 para atualizar um candidato 
+    3 para listar todos os candidatos
+    4 para deletar um candidado   
+    5 para inserir uma nova empresa
+    6 para atualizar uma empresa 
+    7 para Listar todas as empresas
+    8 para deletar uma empresa
     0 para encerrar
     __________________________________"""
 
@@ -28,19 +28,28 @@ class Menu {
         while (op != 0) {
             switch (op){
                 case 1:
-                    candidatesActions.showCandidates()
-                    break
-                case 2:
-                    companiesActions.showCompanies()
-                    break
-                case 3:
                     candidatesActions.newCandidate()
                     break
+                case 2:
+                    candidatesActions.updateCandidate()
+                    break
+                case 3:
+                    candidatesActions.deleteCandidate()
+                    break
                 case 4:
-                    companiesActions.newCompany()
+                    candidatesActions.deleteCandidate()
                     break
                 case 5:
-                    candidatesActions.deleteCandidate()
+                    companiesActions.newCompany()
+                    break
+                case 6:
+                    println "não implementado"
+                    break
+                case 7:
+                    companiesActions.showCompanies()
+                    break
+                case 8:
+                    println "não implementado"
                     break
                 default:
                     println "Digite uma opção válida"
