@@ -36,7 +36,7 @@ class CompanieDAO {
         }
     }
 
-    void insertCompanie(Company companie){
+    void insertCompany(Company company){
         int id = 0
         Connection connection = ConnectionDAO.connection()
 
@@ -46,13 +46,13 @@ class CompanieDAO {
 
         PreparedStatement stm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
 
-        stm.setString(1, companie.name)
-        stm.setString(2, companie.cnpj)
-        stm.setString(3, companie.email)
-        stm.setString(4, companie.description)
-        stm.setString(5, companie.country)
-        stm.setString(6, companie.cep)
-        stm.setString(7, companie.password)
+        stm.setString(1, company.name)
+        stm.setString(2, company.cnpj)
+        stm.setString(3, company.email)
+        stm.setString(4, company.description)
+        stm.setString(5, company.country)
+        stm.setString(6, company.cep)
+        stm.setString(7, company.password)
 
         try {
             int result = stm.executeUpdate()
@@ -64,7 +64,7 @@ class CompanieDAO {
             if (result == 0) {
                 println "Falha ao inserir empresa!"
             } else {
-                println "Empresa ${companie.name} com id - ${id} inserida com sucesso!"
+                println "Empresa ${company.name} com id - ${id} inserida com sucesso!"
             }
 
         } catch (SQLException e) {
@@ -75,7 +75,7 @@ class CompanieDAO {
         }
     }
 
-    static void deleteCompanie(int id){
+    static void deleteCompany(int id){
         Connection connection = ConnectionDAO.connection()
 
         String query = "DELETE FROM companies WHERE id=${id};"
@@ -91,6 +91,40 @@ class CompanieDAO {
             }
         } catch (SQLException e) {
             println e
+        }
+    }
+
+    static void updateCompany(Company company, int id){
+        Connection connection = ConnectionDAO.connection()
+
+        String query = "UPDATE companies SET name = ?, cnpj = ?, " +
+                "email = ?, description = ?, country = ?, cep = ?, password = ? " +
+                "WHERE id = ${id};"
+
+        PreparedStatement stm = connection.prepareStatement(query)
+
+        stm.setString(1, company.name)
+        stm.setString(2, company.cnpj)
+        stm.setString(3, company.email)
+        stm.setString(4, company.description)
+        stm.setString(5, company.country)
+        stm.setString(6, company.cep)
+        stm.setString(7, company.password)
+
+        try {
+            int result = stm.executeUpdate()
+
+            if (result == 0) {
+                println "Falha ao atualizar empresa!"
+            } else {
+                println "Empresa atualizada com sucesso!"
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            connection.close()
+            stm.close()
         }
     }
 }

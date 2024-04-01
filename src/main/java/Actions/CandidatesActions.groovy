@@ -97,6 +97,7 @@ class CandidatesActions {
             op = sc.nextInt()
         }
     }
+
     void updateCandidate(){
         Scanner sc = new Scanner(System.in)
 

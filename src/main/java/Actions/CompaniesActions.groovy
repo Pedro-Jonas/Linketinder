@@ -45,16 +45,61 @@ class CompaniesActions {
                     description: description,
                     password: password)
 
-            companieDAO.insertCompanie(company)
+            companieDAO.insertCompany(company)
         } catch (e) {
             println e
         }
     }
 
-    void deleteCompanie() {
+    void deleteCompany() {
         Scanner sc = new Scanner(System.in)
         System.out.println "Digite o id do empresa que deseja deletar"
         int id = sc.nextInt()
-        companieDAO.deleteCompanie(id);
+        companieDAO.deleteCompany(id);
     }
+
+    void updateCompany(){
+
+        System.out.println "Digite o id da empresa que deseja atualizar"
+        String idString = sc.nextLine()
+
+        System.out.println "Digite o nome da empresa"
+        String name = sc.nextLine()
+
+        System.out.println "Digite o seu email corporativo"
+        String email = sc.nextLine()
+
+        System.out.println "Digite o seu CNPJ"
+        String cnpj = sc.nextLine()
+
+        System.out.println "Digite o seu país"
+        String county = sc.nextLine()
+
+        System.out.println "Digite o seu CEP"
+        String cep = sc.nextLine()
+
+        System.out.println "Digite a sua descrição"
+        String description = sc.nextLine()
+
+        System.out.println "Digite a sua senha"
+        String password = sc.nextLine()
+
+        int id = Integer.parseInt(idString)
+
+        try{
+            Company company = new Company(
+                    name: name,
+                    email: email,
+                    cnpj: cnpj,
+                    country: county,
+                    cep: cep,
+                    description: description,
+                    password: password)
+
+            companieDAO.updateCompany(company, id)
+        } catch (e) {
+            println e
+        }
+    }
+
 }

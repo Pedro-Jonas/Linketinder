@@ -90,25 +90,6 @@ class CandidateDAO {
         return id
     }
 
-    static void deleteCandidate(int id){
-        Connection connection = ConnectionDAO.connection()
-
-        String query = "DELETE FROM candidates WHERE id=${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        try {
-            int result = stm.executeUpdate()
-            if (result == 0) {
-                println "Falha ao deletar candidato ou candidato inexistente!"
-            } else {
-                println "Candidado com id - ${id} deletado com sucesso!"
-            }
-        } catch (SQLException e) {
-            println e
-        }
-    }
-
     static void insertSkillCandidate(int id, String skill){
         Connection connection = ConnectionDAO.connection()
 
@@ -155,6 +136,25 @@ class CandidateDAO {
             stm1.close()
             stm2.close()
             stm3.close()
+        }
+    }
+
+    static void deleteCandidate(int id){
+        Connection connection = ConnectionDAO.connection()
+
+        String query = "DELETE FROM candidates WHERE id=${id};"
+
+        PreparedStatement stm = connection.prepareStatement(query)
+
+        try {
+            int result = stm.executeUpdate()
+            if (result == 0) {
+                println "Falha ao deletar candidato ou candidato inexistente!"
+            } else {
+                println "Candidado com id - ${id} deletado com sucesso!"
+            }
+        } catch (SQLException e) {
+            println e
         }
     }
 

@@ -43,13 +43,13 @@ class Menu {
                     companiesActions.newCompany()
                     break
                 case 6:
-                    println "não implementado"
+                    companiesActions.updateCompany()
                     break
                 case 7:
                     companiesActions.showCompanies()
                     break
                 case 8:
-                    companiesActions.deleteCompanie()
+                    companiesActions.deleteCompany()
                     break
                 default:
                     println "Digite uma opção válida"
