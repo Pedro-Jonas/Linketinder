@@ -61,7 +61,7 @@ class Menu {
                     jobVacanciesActions.newJobVacancy()
                     break
                 case 10:
-                    println "não implementada"
+                    jobVacanciesActions.updateJobVacancy()
                     break
                 case 11:
                     jobVacanciesActions.showJobVacancies()

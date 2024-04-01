@@ -1,7 +1,10 @@
 package Actions
 
+import Classes.Candidate
 import Classes.JobVacancy
 import DAO.JobVacancyDAO
+
+import java.text.SimpleDateFormat
 
 
 class JobVacanciesActions {
@@ -90,6 +93,45 @@ class JobVacanciesActions {
             jobVacancyDAO.deleteJobVacancy(id)
         } catch (Exception e) {
             e.printStackTrace()
+        }
+    }
+
+    void updateJobVacancy(){
+        Scanner sc = new Scanner(System.in)
+
+        System.out.println "Digite o id da vaga que deseja atualizar"
+        String idString = sc.nextLine()
+
+        System.out.println "Digite o id da empresa"
+        String companyIdString = sc.nextLine()
+
+        System.out.println "Digite o nome da vaga"
+        String name = sc.nextLine()
+
+        System.out.println "Digite o seu estado"
+        String state = sc.nextLine()
+
+        System.out.println "Digite a sua cidade"
+        String city = sc.nextLine()
+
+        System.out.println "Digite a sua descrição"
+        String description = sc.nextLine()
+
+
+        int id = Integer.parseInt(idString)
+        int companyId = Integer.parseInt(companyIdString)
+
+        try{
+            JobVacancy jobVacancy = new JobVacancy(
+                    name: name,
+                    state: state,
+                    city: city,
+                    description: description,
+                    companyId: companyId
+            )
+            jobVacancyDAO.updateJobVacancy(jobVacancy, id)
+        } catch (Exception e) {
+            println e
         }
     }
 }

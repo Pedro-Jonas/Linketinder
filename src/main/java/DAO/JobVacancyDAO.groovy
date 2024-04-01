@@ -151,4 +151,36 @@ class JobVacancyDAO {
             println e
         }
     }
+
+    static void updateJobVacancy(JobVacancy jobVacancy, int id){
+        Connection connection = ConnectionDAO.connection()
+
+        String query = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +
+                "description = ?, company_id = ? " +
+                "WHERE id = ${id};"
+
+        PreparedStatement stm = connection.prepareStatement(query)
+
+        stm.setString(1, jobVacancy.name)
+        stm.setString(2, jobVacancy.state)
+        stm.setString(3, jobVacancy.city)
+        stm.setString(4, jobVacancy.description)
+        stm.setInt(5, jobVacancy.companyId)
+
+        try {
+            int result = stm.executeUpdate()
+
+            if (result == 0) {
+                println "Falha ao atualizar vaga!"
+            } else {
+                println "Vaga atualizada com sucesso!"
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            connection.close()
+            stm.close()
+        }
+    }
 }
