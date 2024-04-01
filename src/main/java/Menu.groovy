@@ -61,13 +61,13 @@ class Menu {
                     jobVacanciesActions.newJobVacancy()
                     break
                 case 10:
-                    println "não implementada"''
+                    println "não implementada"
                     break
                 case 11:
                     jobVacanciesActions.showJobVacancies()
                     break
                 case 12:
-                    println "não implementada"
+                    jobVacanciesActions.deleteJobVacancy()
                     break
                 default:
                     println "Digite uma opção válida"

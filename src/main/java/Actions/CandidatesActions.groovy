@@ -10,7 +10,11 @@ class CandidatesActions {
     CandidateDAO candidateDAO = new  CandidateDAO()
 
     void showCandidates() {
-        candidateDAO.showCandidates()
+        try{
+            candidateDAO.showCandidates()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
 
     void newCandidate(){
@@ -63,7 +67,7 @@ class CandidatesActions {
 
             id = candidateDAO.insertCandidate(candidate)
         } catch (Exception e) {
-            println e
+            e.printStackTrace()
         }
 
         if (id != 0){
@@ -75,7 +79,12 @@ class CandidatesActions {
         Scanner sc = new Scanner(System.in)
         System.out.println "Digite o id do candidato que deseja deletar"
         int id = sc.nextInt()
-        candidateDAO.deleteCandidate(id);
+
+        try{
+            candidateDAO.deleteCandidate(id);
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
 
     void addSkillCandidate(int id){
@@ -92,7 +101,12 @@ class CandidatesActions {
                     System.out.println "Digite o sua habilidade"
                     String skill = sc.nextLine()
 
-                    candidateDAO.insertSkillCandidate(id, skill)
+                    try {
+                        candidateDAO.insertSkillCandidate(id, skill)
+                    } catch (Exception e) {
+                        e.printStackTrace()
+                    }
+
                     break
                 default:
                     println "Digite uma opção válida"

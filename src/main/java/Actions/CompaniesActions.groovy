@@ -10,7 +10,11 @@ class CompaniesActions {
     Scanner sc = new Scanner(System.in)
 
     void showCompanies(){
-        companieDAO.showCompanies()
+        try{
+            companieDAO.showCompanies()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
 
     void newCompany(){
@@ -46,8 +50,8 @@ class CompaniesActions {
                     password: password)
 
             companieDAO.insertCompany(company)
-        } catch (e) {
-            println e
+        } catch (Exception e) {
+            e.printStackTrace()
         }
     }
 
@@ -55,7 +59,12 @@ class CompaniesActions {
         Scanner sc = new Scanner(System.in)
         System.out.println "Digite o id do empresa que deseja deletar"
         int id = sc.nextInt()
-        companieDAO.deleteCompany(id);
+
+        try{
+            companieDAO.deleteCompany(id)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
     }
 
     void updateCompany(){
@@ -97,8 +106,8 @@ class CompaniesActions {
                     password: password)
 
             companieDAO.updateCompany(company, id)
-        } catch (e) {
-            println e
+        } catch (Exception e) {
+            e.printStackTrace()
         }
     }
 

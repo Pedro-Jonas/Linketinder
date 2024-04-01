@@ -132,4 +132,23 @@ class JobVacancyDAO {
             stm3.close()
         }
     }
+
+    static void deleteJobVacancy(int id){
+        Connection connection = ConnectionDAO.connection()
+
+        String query = "DELETE FROM job_vacancies WHERE id=${id};"
+
+        PreparedStatement stm = connection.prepareStatement(query)
+
+        try {
+            int result = stm.executeUpdate()
+            if (result == 0) {
+                println "Falha ao deletar vaga ou vaga inexistente!"
+            } else {
+                println "Vaga com id - ${id} deletada com sucesso!"
+            }
+        } catch (SQLException e) {
+            println e
+        }
+    }
 }

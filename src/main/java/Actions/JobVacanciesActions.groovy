@@ -44,7 +44,7 @@ class JobVacanciesActions {
 
             id = jobVacancyDAO.insertJobVacancy(jobVacancy)
         } catch (Exception e) {
-            println e
+            e.printStackTrace()
         }
 
         if (id != 0){
@@ -66,7 +66,12 @@ class JobVacanciesActions {
                     System.out.println "Digite a sua habilidade"
                     String skill = sc.nextLine()
 
-                    jobVacancyDAO.insertSkillJobVacancy(id, skill)
+                    try{
+                        jobVacancyDAO.insertSkillJobVacancy(id, skill)
+                    } catch (Exception e) {
+                       e.printStackTrace()
+                    }
+
                     break
                 default:
                     println "Digite uma opção válida"
@@ -74,6 +79,17 @@ class JobVacanciesActions {
             }
             println text
             op = sc.nextInt()
+        }
+    }
+
+    void deleteJobVacancy(){
+        Scanner sc = new Scanner(System.in)
+        System.out.println "Digite o id da vaga que deseja deletar"
+        int id = sc.nextInt()
+        try{
+            jobVacancyDAO.deleteJobVacancy(id)
+        } catch (Exception e) {
+            e.printStackTrace()
         }
     }
 }
