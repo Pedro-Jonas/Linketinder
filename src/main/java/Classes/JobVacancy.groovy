@@ -5,5 +5,5 @@ class JobVacancy {
     String state
     String city
     String description
-    int company_id
+    int companyId
 }

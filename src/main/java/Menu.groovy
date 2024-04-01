@@ -19,7 +19,10 @@ class Menu {
     6 para atualizar uma empresa 
     7 para Listar todas as empresas
     8 para deletar uma empresa
-    9 para listar todas as vagas
+    9 inserir uma nova vaga
+    10 para  atualizar uma vaga
+    11 para listar todas as vagas
+    12 para deletar uma vaga
     0 para encerrar
     __________________________________"""
 
@@ -55,7 +58,16 @@ class Menu {
                     companiesActions.deleteCompany()
                     break
                 case 9:
+                    jobVacanciesActions.newJobVacancy()
+                    break
+                case 10:
+                    println "não implementada"''
+                    break
+                case 11:
                     jobVacanciesActions.showJobVacancies()
+                    break
+                case 12:
+                    println "não implementada"
                     break
                 default:
                     println "Digite uma opção válida"

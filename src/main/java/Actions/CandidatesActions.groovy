@@ -58,13 +58,17 @@ class CandidatesActions {
                     country: country,
                     cep: cep,
                     description: description,
-                    password: password)
+                    password: password
+            )
+
             id = candidateDAO.insertCandidate(candidate)
-        } catch (e) {
+        } catch (Exception e) {
             println e
         }
 
-        this.addSkillCandidate(id)
+        if (id != 0){
+            this.addSkillCandidate(id)
+        }
     }
 
     void deleteCandidate() {
@@ -87,6 +91,7 @@ class CandidatesActions {
                 case 1:
                     System.out.println "Digite o sua habilidade"
                     String skill = sc.nextLine()
+
                     candidateDAO.insertSkillCandidate(id, skill)
                     break
                 default:
@@ -147,9 +152,10 @@ class CandidatesActions {
                     country: country,
                     cep: cep,
                     description: description,
-                    password: password)
+                    password: password
+            )
             candidateDAO.updateCandidate(candidate, id)
-        } catch (e) {
+        } catch (Exception e) {
             println e
         }
     }
