@@ -34,7 +34,7 @@ class Menu {
                     candidatesActions.updateCandidate()
                     break
                 case 3:
-                    candidatesActions.deleteCandidate()
+                    candidatesActions.showCandidates()
                     break
                 case 4:
                     candidatesActions.deleteCandidate()

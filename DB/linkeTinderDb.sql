@@ -47,8 +47,6 @@ CREATE TABLE IF NOT EXISTS "job_vacancies" (
     PRIMARY KEY ("id")
 );
 
-
-
 CREATE TABLE IF NOT EXISTS "job_vacancies_skill" (
     "id" SERIAL NOT NULL UNIQUE,
     "job_vacancy_id" INT NOT NULL,
@@ -70,7 +68,7 @@ ALTER TABLE "candidate_skill" ADD CONSTRAINT "candidate_skill_fk2" FOREIGN KEY (
 
 ALTER TABLE "like" ADD CONSTRAINT "like_fk1" FOREIGN KEY ("candidate_id") REFERENCES "candidates"("id") ON DELETE CASCADE;
 
-ALTER TABLE "like" ADD CONSTRAINT "like_fk2" FOREIGN KEY ("companie_id") REFERENCES "companies"("id") ON DELETE CASCADE;
+ALTER TABLE "like" ADD CONSTRAINT "like_fk2" FOREIGN KEY ("company_id") REFERENCES "companies"("id") ON DELETE CASCADE;
 
 ALTER TABLE "like" ADD CONSTRAINT "like_fk3" FOREIGN KEY ("job_vacancy_id") REFERENCES "job_vacancies"("id") ON DELETE CASCADE;
 
@@ -177,43 +175,43 @@ VALUES ('FutureTech', '55.555.555/5555-55','FutureTech@gmail.com',
 
 -- inserindo vagas
 
-INSERT INTO job_vacancies (name, description, state, city, companie_id)
+INSERT INTO job_vacancies (name, description, state, city, company_id)
 VALUES ('vaga1','Essa é a descrição','Ceará', 'Crato', 1);
 
-INSERT INTO job_vacancies (name, description, state, city, companie_id)
+INSERT INTO job_vacancies (name, description, state, city, company_id)
 VALUES ('vaga2','Essa é a descrição','Ceará', 'Crato', 1);
 
-INSERT INTO job_vacancies (name, description, state, city, companie_id)
+INSERT INTO job_vacancies (name, description, state, city, company_id)
 VALUES ('vaga3','Essa é a descrição','São Paulo', 'São Paulo', 2);
 
-INSERT INTO job_vacancies (name, description, state, city, companie_id)
+INSERT INTO job_vacancies (name, description, state, city, company_id)
 VALUES ('vaga4','Essa é a descrição','Rio Grande do Norte', 'Natal', 4);
 
-INSERT INTO job_vacancies (name, description, state, city, companie_id)
+INSERT INTO job_vacancies (name, description, state, city, company_id)
 VALUES ('vaga5','Essa é a descrição','Ceará', 'Fortaleza', 5);
 
 -- relacionando as skills com vagas
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (1,1);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (1,2);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (2,3);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (3,5);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (3,6);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (4,1);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (5,3);
 
-INSERT INTO job_vacancies_skill (job_vacancie_id, skill_id)
+INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id)
 VALUES (5,4);
