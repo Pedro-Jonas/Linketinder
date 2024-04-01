@@ -1,10 +1,12 @@
 import Actions.CandidatesActions
 import Actions.CompaniesActions
+import Actions.JobVacanciesActions
 
 class Menu {
 
     CandidatesActions candidatesActions = new CandidatesActions()
     CompaniesActions companiesActions = new CompaniesActions()
+    JobVacanciesActions jobVacanciesActions = new  JobVacanciesActions()
 
     Scanner sc = new Scanner(System.in)
 
@@ -17,6 +19,7 @@ class Menu {
     6 para atualizar uma empresa 
     7 para Listar todas as empresas
     8 para deletar uma empresa
+    9 para listar todas as vagas
     0 para encerrar
     __________________________________"""
 
@@ -50,6 +53,9 @@ class Menu {
                     break
                 case 8:
                     companiesActions.deleteCompany()
+                    break
+                case 9:
+                    jobVacanciesActions.showJobVacancies()
                     break
                 default:
                     println "Digite uma opção válida"

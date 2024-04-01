@@ -4,7 +4,7 @@ import Classes.Company
 
 import java.sql.*
 
-class CompanieDAO {
+class CompanyDAO {
     ConnectionDAO connectionDAO =  new ConnectionDAO()
 
     void showCompanies() {

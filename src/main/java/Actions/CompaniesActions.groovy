@@ -1,11 +1,11 @@
 package Actions
 
 import Classes.Company
-import DAO.CompanieDAO
+import DAO.CompanyDAO
 
 class CompaniesActions {
 
-    CompanieDAO companieDAO = new CompanieDAO()
+    CompanyDAO companieDAO = new CompanyDAO()
 
     Scanner sc = new Scanner(System.in)
 
