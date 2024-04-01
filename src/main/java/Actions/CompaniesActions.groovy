@@ -50,4 +50,11 @@ class CompaniesActions {
             println e
         }
     }
+
+    void deleteCompanie() {
+        Scanner sc = new Scanner(System.in)
+        System.out.println "Digite o id do empresa que deseja deletar"
+        int id = sc.nextInt()
+        companieDAO.deleteCompanie(id);
+    }
 }

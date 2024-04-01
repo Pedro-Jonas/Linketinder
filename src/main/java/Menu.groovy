@@ -49,7 +49,7 @@ class Menu {
                     companiesActions.showCompanies()
                     break
                 case 8:
-                    println "não implementado"
+                    companiesActions.deleteCompanie()
                     break
                 default:
                     println "Digite uma opção válida"
