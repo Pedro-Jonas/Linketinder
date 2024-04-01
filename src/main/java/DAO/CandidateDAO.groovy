@@ -3,7 +3,6 @@ package DAO
 import Classes.Candidate
 
 import java.sql.*
-import java.text.SimpleDateFormat
 
 class CandidateDAO {
     ConnectionDAO connectionDAO =  new ConnectionDAO()
@@ -13,7 +12,7 @@ class CandidateDAO {
 
         String query = "SELECT cd.*, ARRAY_AGG(sk.name) skills FROM candidates AS cd INNER JOIN " +
                 "candidate_skill AS ck " +
-                "on cd.id = ck.candidate_id INNER JOIN " +
+                "ON cd.id = ck.candidate_id INNER JOIN " +
                 "skill AS sk " +
                 "ON ck.skill_id = sk.id " +
                 "GROUP BY cd.id;"

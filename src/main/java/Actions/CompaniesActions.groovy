@@ -1,22 +1,16 @@
 package Actions
 
 import Classes.Company
+import DAO.CompanieDAO
 
 class CompaniesActions {
 
-    ArrayList<Company> companies = new ArrayList<>()
+    CompanieDAO companieDAO = new CompanieDAO()
+
     Scanner sc = new Scanner(System.in)
 
     void showCompanies(){
-        companies.each {println it}
-    }
-
-    int countCompanies() {
-        companies.size()
-    }
-
-    void insertNewCompany(Company company) {
-        companies.add(company)
+        companieDAO.showCompanies()
     }
 
     void newCompany(){
@@ -32,25 +26,26 @@ class CompaniesActions {
         System.out.println "Digite o seu país"
         String county = sc.nextLine()
 
-        System.out.println "Digite o seu estado"
-        String state = sc.nextLine()
-
         System.out.println "Digite o seu CEP"
         String cep = sc.nextLine()
 
         System.out.println "Digite a sua descrição"
         String description = sc.nextLine()
 
+        System.out.println "Digite a sua senha"
+        String password = sc.nextLine()
+
         try{
             Company company = new Company(
                     name: name,
                     email: email,
                     cnpj: cnpj,
-                    county: county,
-                    state: state,
+                    country: county,
                     cep: cep,
-                    description: description)
-            insertNewCompany(company)
+                    description: description,
+                    password: password)
+
+            companieDAO.insertCompanie(company)
         } catch (e) {
             println e
         }
