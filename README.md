@@ -8,9 +8,14 @@ DB Designer
 <img src="./DB/linketinder.png">
 ## COMO RODAR
 1. Faça o clone da apliação
-2. Navegue até o diretório `src`
-3. Efim execulte
+2. Navegue até o diretório do projeto
+3. Execulte
 ```bash
-groovy App.groovy 
+gradle build
 ```
+4. Enfim execulte
+```bash
+gradle run
+```
+
 <!-- Pedro Jonas Nunes de Araújo -->
