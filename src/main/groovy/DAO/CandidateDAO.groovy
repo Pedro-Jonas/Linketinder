@@ -57,7 +57,7 @@ class CandidateDAO {
 
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
-        stm.setString(1, candidate.fristName)
+        stm.setString(1, candidate.firstName)
         stm.setString(2, candidate.lastName)
         stm.setDate(3, dateOf_birth)
         stm.setString(4, candidate.email)
@@ -77,7 +77,7 @@ class CandidateDAO {
             if (result == 0) {
                 println "Falha ao inserir candidato!"
             } else {
-                println "Candidado ${candidate.fristName} com id - ${id} inserido com sucesso!"
+                println "Candidado ${candidate.firstName} com id - ${id} inserido com sucesso!"
             }
 
         } catch (SQLException e) {
@@ -169,7 +169,7 @@ class CandidateDAO {
 
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
-        stm.setString(1, candidate.fristName)
+        stm.setString(1, candidate.firstName)
         stm.setString(2, candidate.lastName)
         stm.setDate(3, dateOf_birth)
         stm.setString(4, candidate.email)

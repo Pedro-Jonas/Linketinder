@@ -1,7 +1,7 @@
 package Classes
 
 class Candidate extends Users {
-    String fristName
+    String firstName
     String lastName
     Date dateOfBirth
     String cpf

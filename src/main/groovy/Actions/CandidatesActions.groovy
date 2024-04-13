@@ -20,7 +20,7 @@ class CandidatesActions {
     void newCandidate(){
         int id = 0
 
-        Candidate candidate = createCandidate()
+        Candidate candidate = createNewCandidate()
 
         try{
             id = candidateDAO.insertCandidate(candidate)
@@ -81,58 +81,18 @@ class CandidatesActions {
         System.out.println "Digite o id do candidato que deseja atualizar"
         String idString = sc.nextLine()
 
-        System.out.println "Digite o seu nome"
-        String fristName = sc.nextLine()
-
-        System.out.println "Digite o seu sobrenome"
-        String lastName = sc.nextLine()
-
-        System.out.println "Digite a sua data de nascimento"
-        String dateOfBirthString = sc.nextLine()
-
-        System.out.println "Digite o seu email"
-        String email = sc.nextLine()
-
-        System.out.println "Digite o seu CPF"
-        String cpf = sc.nextLine()
-
-        System.out.println "Digite o seu país"
-        String country = sc.nextLine()
-
-        System.out.println "Digite o seu CEP"
-        String cep = sc.nextLine()
-
-        System.out.println "Digite a sua descrição"
-        String description = sc.nextLine()
-
-        System.out.println "Digite a sua senha"
-        String password = sc.nextLine()
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
-
-        Date dateOfBirth = sdf.parse(dateOfBirthString)
-
         int id = Integer.parseInt(idString)
 
+        Candidate candidate = createNewCandidate()
+
         try{
-            Candidate candidate = new Candidate(
-                    fristName: fristName,
-                    lastName: lastName,
-                    dateOfBirth: dateOfBirth,
-                    email: email,
-                    cpf: cpf,
-                    country: country,
-                    cep: cep,
-                    description: description,
-                    password: password
-            )
             candidateDAO.updateCandidate(candidate, id)
         } catch (Exception e) {
             println e
         }
     }
 
-    private Candidate createCandidate() {
+    private static Candidate createNewCandidate() {
         Scanner sc = new Scanner(System.in)
 
         System.out.println "Digite o seu nome"
@@ -169,7 +129,7 @@ class CandidatesActions {
         Candidate candidate = new Candidate()
 
         try{
-            candidate.setFristName(firstName)
+            candidate.setFirstName(firstName)
             candidate.setLastName(lastName)
             candidate.setDateOfBirth(dateOfBirth)
             candidate.setEmail(email)
