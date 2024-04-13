@@ -9,6 +9,8 @@ class CandidatesActions {
 
     CandidateDAO candidateDAO = new  CandidateDAO()
 
+    Scanner sc = new Scanner(System.in)
+
     void showCandidates() {
         try{
             candidateDAO.showCandidates()
@@ -17,7 +19,7 @@ class CandidatesActions {
         }
     }
 
-    void newCandidate(){
+    void addCandidate(){
         int id = 0
 
         Candidate candidate = createNewCandidate()
@@ -34,7 +36,7 @@ class CandidatesActions {
     }
 
     void deleteCandidate() {
-        Scanner sc = new Scanner(System.in)
+
         System.out.println "Digite o id do candidato que deseja deletar"
         int id = sc.nextInt()
 
@@ -46,13 +48,14 @@ class CandidatesActions {
     }
 
     void addSkillCandidate(int id) {
+
         String text = "Digite a opção desejada: \n" +
                 "1 para inserir mais uma habilidade \n" +
                 "0 para parar a inserção \n"
 
         int op = 1;
 
-        while (op != 0){
+        while (op != 0) {
             Scanner sc = new Scanner(System.in)
             switch (op){
                 case 1:
@@ -75,8 +78,7 @@ class CandidatesActions {
         }
     }
 
-    void updateCandidate(){
-        Scanner sc = new Scanner(System.in)
+    void updateCandidate() {
 
         System.out.println "Digite o id do candidato que deseja atualizar"
         String idString = sc.nextLine()

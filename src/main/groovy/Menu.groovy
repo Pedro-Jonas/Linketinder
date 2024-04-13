@@ -33,7 +33,7 @@ class Menu {
         while (op != 0) {
             switch (op){
                 case 1:
-                    candidatesActions.newCandidate()
+                    candidatesActions.addCandidate()
                     break
                 case 2:
                     candidatesActions.updateCandidate()
@@ -45,7 +45,7 @@ class Menu {
                     candidatesActions.deleteCandidate()
                     break
                 case 5:
-                    companiesActions.newCompany()
+                    companiesActions.addCompany()
                     break
                 case 6:
                     companiesActions.updateCompany()

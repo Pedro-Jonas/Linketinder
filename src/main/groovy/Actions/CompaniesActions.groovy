@@ -5,72 +5,56 @@ import DAO.CompanyDAO
 
 class CompaniesActions {
 
-    CompanyDAO companieDAO = new CompanyDAO()
+    CompanyDAO companyDAO = new CompanyDAO()
 
     Scanner sc = new Scanner(System.in)
 
     void showCompanies(){
         try{
-            companieDAO.showCompanies()
+            companyDAO.showCompanies()
         } catch (Exception e) {
             e.printStackTrace()
         }
     }
 
-    void newCompany(){
-        System.out.println "Digite o nome da empresa"
-        String name = sc.nextLine()
-
-        System.out.println "Digite o seu email corporativo"
-        String email = sc.nextLine()
-
-        System.out.println "Digite o seu CNPJ"
-        String cnpj = sc.nextLine()
-
-        System.out.println "Digite o seu país"
-        String county = sc.nextLine()
-
-        System.out.println "Digite o seu CEP"
-        String cep = sc.nextLine()
-
-        System.out.println "Digite a sua descrição"
-        String description = sc.nextLine()
-
-        System.out.println "Digite a sua senha"
-        String password = sc.nextLine()
+    void addCompany(){
+        Company company = creatNewCompany()
 
         try{
-            Company company = new Company(
-                    name: name,
-                    email: email,
-                    cnpj: cnpj,
-                    country: county,
-                    cep: cep,
-                    description: description,
-                    password: password)
-
-            companieDAO.insertCompany(company)
+            companyDAO.insertCompany(company)
         } catch (Exception e) {
             e.printStackTrace()
         }
     }
 
     void deleteCompany() {
-        Scanner sc = new Scanner(System.in)
+
         System.out.println "Digite o id do empresa que deseja deletar"
         int id = sc.nextInt()
 
         try{
-            companieDAO.deleteCompany(id)
+            companyDAO.deleteCompany(id)
         } catch (Exception e) {
             e.printStackTrace()
         }
     }
 
-    void updateCompany(){
+    void updateCompany() {
 
         System.out.println "Digite o id da empresa que deseja atualizar"
-        String idString = sc.nextLine()
+        int id = sc.nextInt()
+
+        Company company = creatNewCompany()
+
+        try{
+            companyDAO.updateCompany(company, id)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+    }
+
+    private static Company creatNewCompany() {
+        Scanner sc = new Scanner(System.in)
 
         System.out.println "Digite o nome da empresa"
         String name = sc.nextLine()
@@ -93,21 +77,20 @@ class CompaniesActions {
         System.out.println "Digite a sua senha"
         String password = sc.nextLine()
 
-        int id = Integer.parseInt(idString)
+        Company company = new Company()
 
         try{
-            Company company = new Company(
-                    name: name,
-                    email: email,
-                    cnpj: cnpj,
-                    country: county,
-                    cep: cep,
-                    description: description,
-                    password: password)
-
-            companieDAO.updateCompany(company, id)
+            company.setName(name)
+            company.setEmail(email)
+            company.setCnpj(cnpj)
+            company.setCountry(county)
+            company.setCep(cep)
+            company.setDescription(description)
+            company.setPassword(password)
         } catch (Exception e) {
             e.printStackTrace()
         }
+
+        return company
     }
 }
