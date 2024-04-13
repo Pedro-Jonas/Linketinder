@@ -81,49 +81,32 @@ class CandidateDAO {
     static void insertSkillCandidate(int id, String skill) {
         Connection connection = ConnectionDAO.connection()
 
-        String query1 = "SELECT * FROM skill sk WHERE sk.name = '${skill}'";
-        PreparedStatement stm1 = connection.prepareStatement(query1)
+        int  skillId =  selectSkillForName(skill)
 
-        String query2 = "INSERT INTO skill (name) VALUES(?);"
-        PreparedStatement stm2 = connection.prepareStatement(query2, Statement.RETURN_GENERATED_KEYS)
-        int skill_id = 0
-
-        stm2.setString(1,skill)
-
-        try {
-            ResultSet result = stm1.executeQuery()
-
-            int count = 0
-            while (result.next()) {
-                skill_id = result.getInt("id")
-                count++
-            }
-            if (count == 0) {
-                stm2.executeUpdate()
-                try (ResultSet rs = stm2.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        skill_id = rs.getInt(1)
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace()
+        if(skillId == 0) {
+            skillId = insertSkill(skill)
         }
 
-        String query3 = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
-        PreparedStatement stm3 = connection.prepareStatement(query3)
+        String query = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
+        PreparedStatement stm = connection.prepareStatement(query)
 
-        stm3.setInt(1, id)
-        stm3.setInt(2, skill_id)
+        stm.setInt(1, id)
+        stm.setInt(2, skillId)
+
         try {
-            stm3.executeUpdate()
+            int result = stm.executeUpdate()
+
+            if (result == 0) {
+                println "Falha ao inserir skill!"
+            } else {
+                println "skill com id - ${skillId} inserida com sucesso!"
+            }
+
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
-            stm1.close()
-            stm2.close()
-            stm3.close()
+            stm.close()
         }
     }
 
@@ -153,7 +136,7 @@ class CandidateDAO {
     static void updateCandidate(Candidate candidate, int id) {
         Connection connection = ConnectionDAO.connection()
 
-        String query = "UPDATE candidates SET frist_name = ?, last_name = ?, date_of_Birth = ?, " +
+        String query = "UPDATE candidates SET first_name = ?, last_name = ?, date_of_Birth = ?, " +
                 "email = ?, cpf = ?, country = ?, cep = ?, description = ?, password = ? " +
                 "WHERE id = ${id};"
 
@@ -188,7 +171,7 @@ class CandidateDAO {
         }
     }
 
-    static void printCandidates(ResultSet result) {
+    private static void printCandidates(ResultSet result) {
         while (result.next()) {
             String candidate = "id - " + result.getInt("id") + "\n" +
                     "nome - " +  result.getString("first_name") + "\n" +
@@ -204,5 +187,55 @@ class CandidateDAO {
 
             println candidate
         }
+    }
+
+    private static int selectSkillForName(String skill) {
+        Connection connection = ConnectionDAO.connection()
+
+        String query1 = "SELECT * FROM skill sk WHERE sk.name = '${skill}'";
+        PreparedStatement stm = connection.prepareStatement(query1)
+
+        int skill_id = 0
+
+        try {
+            ResultSet result = stm.executeQuery()
+
+            while (result.next()) {
+                skill_id = result.getInt("id")
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            connection.close()
+            stm.close()
+        }
+        return skill_id
+    }
+
+    private static int insertSkill(String skill) {
+        Connection connection = ConnectionDAO.connection()
+        String query2 = "INSERT INTO skill (name) VALUES(?);"
+        PreparedStatement stm = connection.prepareStatement(query2, Statement.RETURN_GENERATED_KEYS)
+
+        stm.setString(1, skill)
+
+        int skill_id = 0
+
+        try {
+            stm.execute()
+            ResultSet rs = stm.getGeneratedKeys()
+
+            if (rs.next()) {
+                skill_id = rs.getInt(1)
+            }
+        } catch (SQLException e) {
+                e.printStackTrace()
+        } finally {
+            connection.close()
+            stm.close()
+        }
+
+        return skill_id
     }
 }
