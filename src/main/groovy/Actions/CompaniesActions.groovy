@@ -9,7 +9,8 @@ class CompaniesActions {
 
     Scanner sc = new Scanner(System.in)
 
-    void showCompanies(){
+    void showCompanies() {
+
         try{
             companyDAO.showCompanies()
         } catch (Exception e) {
@@ -17,7 +18,7 @@ class CompaniesActions {
         }
     }
 
-    void addCompany(){
+    void addCompany() {
         Company company = creatNewCompany()
 
         try{
