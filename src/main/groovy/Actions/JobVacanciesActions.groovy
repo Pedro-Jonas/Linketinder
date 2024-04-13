@@ -13,34 +13,13 @@ class JobVacanciesActions {
         jobVacancyDAO.showJobVacancies()
     }
 
-    void newJobVacancy(){
+    void addJobVacancy() {
+
         int id = 0
-        System.out.println "Digite o id da empresa"
-        String companyIdString = sc.nextLine()
 
-        System.out.println "Digite o nome da vaga"
-        String name = sc.nextLine()
-
-        System.out.println "Digite o seu estado"
-        String state = sc.nextLine()
-
-        System.out.println "Digite a sua cidade"
-        String city = sc.nextLine()
-
-        System.out.println "Digite a sua descrição"
-        String description = sc.nextLine()
-
-        int companyId = Integer.parseInt(companyIdString)
+        JobVacancy jobVacancy = createNewJobVacancy()
 
         try {
-            JobVacancy jobVacancy = new JobVacancy(
-                    name: name,
-                    state: state,
-                    city: city,
-                    description: description,
-                    companyId: companyId
-            )
-
             id = jobVacancyDAO.insertJobVacancy(jobVacancy)
         } catch (Exception e) {
             e.printStackTrace()
@@ -51,7 +30,7 @@ class JobVacanciesActions {
         }
     }
 
-    void addSkillJobVacancy(int id){
+    private void addSkillJobVacancy(int id){
         String text = "Digite a opção desejada: \n" +
                 "1 para inserir mais uma habilidade \n" +
                 "0 para parar a inserção \n"
@@ -82,9 +61,10 @@ class JobVacanciesActions {
     }
 
     void deleteJobVacancy(){
-        Scanner sc = new Scanner(System.in)
+
         System.out.println "Digite o id da vaga que deseja deletar"
         int id = sc.nextInt()
+
         try{
             jobVacancyDAO.deleteJobVacancy(id)
         } catch (Exception e) {
@@ -92,14 +72,27 @@ class JobVacanciesActions {
         }
     }
 
-    void updateJobVacancy(){
-        Scanner sc = new Scanner(System.in)
+    void updateJobVacancy() {
 
         System.out.println "Digite o id da vaga que deseja atualizar"
         String idString = sc.nextLine()
 
+        int id = Integer.parseInt(idString)
+
+        JobVacancy jobVacancy = createNewJobVacancy()
+
+        try{
+            jobVacancyDAO.updateJobVacancy(jobVacancy, id)
+        } catch (Exception e) {
+            println e
+        }
+    }
+
+    private JobVacancy createNewJobVacancy() {
+
         System.out.println "Digite o id da empresa"
         String companyIdString = sc.nextLine()
+        int companyId = Integer.parseInt(companyIdString)
 
         System.out.println "Digite o nome da vaga"
         String name = sc.nextLine()
@@ -113,21 +106,18 @@ class JobVacanciesActions {
         System.out.println "Digite a sua descrição"
         String description = sc.nextLine()
 
-
-        int id = Integer.parseInt(idString)
-        int companyId = Integer.parseInt(companyIdString)
+        JobVacancy jobVacancy = new JobVacancy()
 
         try{
-            JobVacancy jobVacancy = new JobVacancy(
-                    name: name,
-                    state: state,
-                    city: city,
-                    description: description,
-                    companyId: companyId
-            )
-            jobVacancyDAO.updateJobVacancy(jobVacancy, id)
+            jobVacancy.setCompanyId(companyId)
+            jobVacancy.setName(name)
+            jobVacancy.setState(state)
+            jobVacancy.setCity(city)
+            jobVacancy.setDescription(description)
         } catch (Exception e) {
-            println e
+            e.printStackTrace()
         }
+
+        return jobVacancy
     }
 }

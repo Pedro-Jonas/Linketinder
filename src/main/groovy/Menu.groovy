@@ -57,7 +57,7 @@ class Menu {
                     companiesActions.deleteCompany()
                     break
                 case 9:
-                    jobVacanciesActions.newJobVacancy()
+                    jobVacanciesActions.addJobVacancy()
                     break
                 case 10:
                     jobVacanciesActions.updateJobVacancy()
