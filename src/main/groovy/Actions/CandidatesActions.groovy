@@ -19,52 +19,10 @@ class CandidatesActions {
 
     void newCandidate(){
         int id = 0
-        Scanner sc = new Scanner(System.in)
 
-        System.out.println "Digite o seu nome"
-        String fristName = sc.nextLine()
-
-        System.out.println "Digite o seu sobrenome"
-        String lastName = sc.nextLine()
-
-        System.out.println "Digite a sua data de nascimento"
-        String dateOfBirthString = sc.nextLine()
-
-        System.out.println "Digite o seu email"
-        String email = sc.nextLine()
-
-        System.out.println "Digite o seu CPF"
-        String cpf = sc.nextLine()
-
-        System.out.println "Digite o seu país"
-        String country = sc.nextLine()
-
-        System.out.println "Digite o seu CEP"
-        String cep = sc.nextLine()
-
-        System.out.println "Digite a sua descrição"
-        String description = sc.nextLine()
-
-        System.out.println "Digite a sua senha"
-        String password = sc.nextLine()
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
-
-        Date dateOfBirth = sdf.parse(dateOfBirthString)
+        Candidate candidate = createCandidate()
 
         try{
-            Candidate candidate = new Candidate(
-                    fristName: fristName,
-                    lastName: lastName,
-                    dateOfBirth: dateOfBirth,
-                    email: email,
-                    cpf: cpf,
-                    country: country,
-                    cep: cep,
-                    description: description,
-                    password: password
-            )
-
             id = candidateDAO.insertCandidate(candidate)
         } catch (Exception e) {
             e.printStackTrace()
@@ -87,7 +45,7 @@ class CandidatesActions {
         }
     }
 
-    void addSkillCandidate(int id){
+    void addSkillCandidate(int id) {
         String text = "Digite a opção desejada: \n" +
                 "1 para inserir mais uma habilidade \n" +
                 "0 para parar a inserção \n"
@@ -172,5 +130,58 @@ class CandidatesActions {
         } catch (Exception e) {
             println e
         }
+    }
+
+    private Candidate createCandidate() {
+        Scanner sc = new Scanner(System.in)
+
+        System.out.println "Digite o seu nome"
+        String firstName = sc.nextLine()
+
+        System.out.println "Digite o seu sobrenome"
+        String lastName = sc.nextLine()
+
+        System.out.println "Digite a sua data de nascimento"
+        String dateOfBirthString = sc.nextLine()
+
+        System.out.println "Digite o seu email"
+        String email = sc.nextLine()
+
+        System.out.println "Digite o seu CPF"
+        String cpf = sc.nextLine()
+
+        System.out.println "Digite o seu país"
+        String country = sc.nextLine()
+
+        System.out.println "Digite o seu CEP"
+        String cep = sc.nextLine()
+
+        System.out.println "Digite a sua descrição"
+        String description = sc.nextLine()
+
+        System.out.println "Digite a sua senha"
+        String password = sc.nextLine()
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy")
+
+        Date dateOfBirth = sdf.parse(dateOfBirthString)
+
+        Candidate candidate = new Candidate()
+
+        try{
+            candidate.setFristName(firstName)
+            candidate.setLastName(lastName)
+            candidate.setDateOfBirth(dateOfBirth)
+            candidate.setEmail(email)
+            candidate.setCpf(cpf)
+            candidate.setCountry(country)
+            candidate.setCep(cep)
+            candidate.setDescription(description)
+            candidate.setPassword(password)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return candidate
     }
 }
