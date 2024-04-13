@@ -20,23 +20,10 @@ class CandidateDAO {
         PreparedStatement stm = connection.prepareStatement(query)
 
         try{
+
             ResultSet result = stm.executeQuery()
+            printCandidates(result)
 
-            while (result.next()) {
-                String candidate = "id - " + result.getInt("id") + "\n" +
-                        "nome - " +  result.getString("frist_name") + "\n" +
-                        "sobrenome - " + result.getString("last_name") + "\n" +
-                        "data de nascimento - " + result.getString("date_of_birth") + "\n" +
-                        "email - " + result.getString("email") + "\n" +
-                        "cpf - " + result.getString("cpf") + "\n" +
-                        "país - " + result.getString("country") + "\n" +
-                        "CEP - " + result.getString("cep") + "\n" +
-                        "descrição - " + result.getString("description") + "\n" +
-                        "senha - " + result.getString("password") + "\n" +
-                        "skills - " + result.getArray("skills") + "\n"
-
-                println candidate
-            }
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -44,16 +31,15 @@ class CandidateDAO {
         }
     }
 
-    static int insertCandidate(Candidate candidate){
+    static int insertCandidate(Candidate candidate) {
         int id = 0
         Connection connection = ConnectionDAO.connection()
 
-        String query = "INSERT INTO candidates (frist_name, last_name, date_of_Birth," +
+        String query = "INSERT INTO candidates (first_name, last_name, date_of_Birth," +
                 " email, cpf, country, cep, description, password)  " +
                 "VALUES (?,?,?,?,?,?,?,?,?);"
 
         PreparedStatement stm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
-
 
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
@@ -69,11 +55,13 @@ class CandidateDAO {
 
         try {
             int result = stm.executeUpdate()
-            try (ResultSet rs = stm.getGeneratedKeys()) {
-                if (rs.next()) {
-                    id = rs.getInt(1)
-                }
+
+            ResultSet rs = stm.getGeneratedKeys()
+
+            if (rs.next()) {
+                id = rs.getInt(1)
             }
+
             if (result == 0) {
                 println "Falha ao inserir candidato!"
             } else {
@@ -90,7 +78,7 @@ class CandidateDAO {
         return id
     }
 
-    static void insertSkillCandidate(int id, String skill){
+    static void insertSkillCandidate(int id, String skill) {
         Connection connection = ConnectionDAO.connection()
 
         String query1 = "SELECT * FROM skill sk WHERE sk.name = '${skill}'";
@@ -139,7 +127,7 @@ class CandidateDAO {
         }
     }
 
-    static void deleteCandidate(int id){
+    static void deleteCandidate(int id) {
         Connection connection = ConnectionDAO.connection()
 
         String query = "DELETE FROM candidates WHERE id=${id};"
@@ -148,6 +136,7 @@ class CandidateDAO {
 
         try {
             int result = stm.executeUpdate()
+
             if (result == 0) {
                 println "Falha ao deletar candidato ou candidato inexistente!"
             } else {
@@ -155,10 +144,13 @@ class CandidateDAO {
             }
         } catch (SQLException e) {
             println e
+        } finally {
+            connection.close()
+            stm.close()
         }
     }
 
-    static void updateCandidate(Candidate candidate, int id){
+    static void updateCandidate(Candidate candidate, int id) {
         Connection connection = ConnectionDAO.connection()
 
         String query = "UPDATE candidates SET frist_name = ?, last_name = ?, date_of_Birth = ?, " +
@@ -193,6 +185,24 @@ class CandidateDAO {
         } finally {
             connection.close()
             stm.close()
+        }
+    }
+
+    static void printCandidates(ResultSet result) {
+        while (result.next()) {
+            String candidate = "id - " + result.getInt("id") + "\n" +
+                    "nome - " +  result.getString("first_name") + "\n" +
+                    "sobrenome - " + result.getString("last_name") + "\n" +
+                    "data de nascimento - " + result.getString("date_of_birth") + "\n" +
+                    "email - " + result.getString("email") + "\n" +
+                    "cpf - " + result.getString("cpf") + "\n" +
+                    "país - " + result.getString("country") + "\n" +
+                    "CEP - " + result.getString("cep") + "\n" +
+                    "descrição - " + result.getString("description") + "\n" +
+                    "senha - " + result.getString("password") + "\n" +
+                    "skills - " + result.getArray("skills") + "\n"
+
+            println candidate
         }
     }
 }
