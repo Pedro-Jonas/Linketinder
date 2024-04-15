@@ -127,7 +127,7 @@ class JobVacancyDAO {
         }
     }
 
-    static void deleteJobVacancy(int id){
+    static void deleteJobVacancy(int id) {
         Connection connection = ConnectionDAO.connection()
 
         String query = "DELETE FROM job_vacancies WHERE id=${id};"
@@ -146,7 +146,7 @@ class JobVacancyDAO {
         }
     }
 
-    static void updateJobVacancy(JobVacancy jobVacancy, int id){
+    static void updateJobVacancy(JobVacancy jobVacancy, int id) {
         Connection connection = ConnectionDAO.connection()
 
         String query = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +

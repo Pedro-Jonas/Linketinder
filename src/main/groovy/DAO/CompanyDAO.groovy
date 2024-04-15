@@ -16,19 +16,7 @@ class CompanyDAO {
 
         try{
             ResultSet result = stm.executeQuery()
-
-            while (result.next()) {
-                String company = "id - " + result.getInt("id") + "\n" +
-                        "nome - " +  result.getString("name") + "\n" +
-                        "CNPJ - " + result.getString("cnpj") + "\n" +
-                        "email - " + result.getString("email") + "\n" +
-                        "descrição - " + result.getString("description") + "\n" +
-                        "país - " + result.getString("country") + "\n" +
-                        "CEP - " + result.getString("cep") + "\n" +
-                        "senha - " + result.getString("password") + "\n"
-
-                println company
-            }
+            printCompanies(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -56,41 +44,22 @@ class CompanyDAO {
 
         try {
             int result = stm.executeUpdate()
-            try (ResultSet rs = stm.getGeneratedKeys()) {
-                if (rs.next()) {
-                    id = rs.getInt(1)
-                }
+            ResultSet rs = stm.getGeneratedKeys()
+
+            if (rs.next()) {
+                id = rs.getInt(1)
             }
+
             if (result == 0) {
                 println "Falha ao inserir empresa!"
             } else {
                 println "Empresa ${company.name} com id - ${id} inserida com sucesso!"
             }
-
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
-        }
-    }
-
-    static void deleteCompany(int id){
-        Connection connection = ConnectionDAO.connection()
-
-        String query = "DELETE FROM companies WHERE id=${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        try {
-            int result = stm.executeUpdate()
-            if (result == 0) {
-                println "Falha ao deletar empresa ou empresa inexistente!"
-            } else {
-                println "Empresa com id - ${id} deletada com sucesso!"
-            }
-        } catch (SQLException e) {
-            println e
         }
     }
 
@@ -125,6 +94,44 @@ class CompanyDAO {
         } finally {
             connection.close()
             stm.close()
+        }
+    }
+
+    static void deleteCompany(int id){
+        Connection connection = ConnectionDAO.connection()
+
+        String query = "DELETE FROM companies WHERE id=${id};"
+
+        PreparedStatement stm = connection.prepareStatement(query)
+
+        try {
+            int result = stm.executeUpdate()
+
+            if (result == 0) {
+                println "Falha ao deletar empresa ou empresa inexistente!"
+            } else {
+                println "Empresa com id - ${id} deletada com sucesso!"
+            }
+        } catch (SQLException e) {
+            println e
+        } finally {
+            connection.close()
+            stm.close()
+        }
+    }
+
+    private static void printCompanies(ResultSet result) {
+        while (result.next()) {
+            String company = "id - " + result.getInt("id") + "\n" +
+                    "nome - " +  result.getString("name") + "\n" +
+                    "CNPJ - " + result.getString("cnpj") + "\n" +
+                    "email - " + result.getString("email") + "\n" +
+                    "descrição - " + result.getString("description") + "\n" +
+                    "país - " + result.getString("country") + "\n" +
+                    "CEP - " + result.getString("cep") + "\n" +
+                    "senha - " + result.getString("password") + "\n"
+
+            println company
         }
     }
 }
