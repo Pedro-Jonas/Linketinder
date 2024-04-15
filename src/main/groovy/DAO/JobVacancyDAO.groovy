@@ -6,8 +6,9 @@ import java.sql.*
 
 class JobVacancyDAO {
     ConnectionDAO connectionDAO =  new ConnectionDAO()
+    SkillDAO skillDAO = new SkillDAO()
 
-    void showJobVacancies(){
+    void showJobVacancies() {
         Connection connection = connectionDAO.connection()
 
         String query = "SELECT jv.*, ARRAY_AGG(sk.name) skills FROM job_vacancies AS jv INNER JOIN " +
@@ -21,25 +22,16 @@ class JobVacancyDAO {
 
         try{
             ResultSet result = stm.executeQuery()
-
-            while (result.next()) {
-                String candidate = "id - " + result.getInt("id") + "\n" +
-                        "nome - " +  result.getString("name") + "\n" +
-                        "descrição - " + result.getString("description") + "\n" +
-                        "estado - " + result.getString("state") + "\n" +
-                        "cidade - " + result.getString("city") + "\n" +
-                        "skills - " + result.getArray("skills") + "\n"
-
-                println candidate
-            }
+            printJobVacancies(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
+            stm.close()
         }
     }
 
-    static int insertJobVacancy(JobVacancy jobVacancy){
+    static int insertJobVacancy(JobVacancy jobVacancy) {
         int id = 0
         Connection connection = ConnectionDAO.connection()
 
@@ -56,17 +48,17 @@ class JobVacancyDAO {
 
         try {
             int result = stm.executeUpdate()
-            try (ResultSet rs = stm.getGeneratedKeys()) {
-                if (rs.next()) {
-                    id = rs.getInt(1)
-                }
+            ResultSet rs = stm.getGeneratedKeys()
+
+            if (rs.next()) {
+                id = rs.getInt(1)
             }
+
             if (result == 0) {
                 println "Falha ao inserir vaga!"
             } else {
                 println "Vaga ${jobVacancy.name} com id - ${id} inserido com sucesso!"
             }
-
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -77,53 +69,34 @@ class JobVacancyDAO {
         return id
     }
 
-    static void insertSkillJobVacancy(int id, String skill){
+    void insertSkillJobVacancy(int id, String skill){
         Connection connection = ConnectionDAO.connection()
 
-        String query1 = "SELECT * FROM skill sk WHERE sk.name = '${skill}'";
-        PreparedStatement stm1 = connection.prepareStatement(query1)
+        int skillId = skillDAO.selectSkillForName(skill)
 
-        String query2 = "INSERT INTO skill (name) VALUES(?);"
-        PreparedStatement stm2 = connection.prepareStatement(query2, Statement.RETURN_GENERATED_KEYS)
-        int skill_id = 0
-
-        stm2.setString(1,skill)
-
-        try {
-            ResultSet result = stm1.executeQuery()
-
-            int count = 0
-            while (result.next()) {
-                skill_id = result.getInt("id")
-                count++
-            }
-            if (count == 0) {
-                stm2.executeUpdate()
-                try (ResultSet rs = stm2.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        skill_id = rs.getInt(1)
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace()
+        if (skillId == 0){
+            skillId = skillDAO.insertSkill(skill)
         }
 
-        String query3 = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
-        PreparedStatement stm3 = connection.prepareStatement(query3)
+        String query = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
+        PreparedStatement stm = connection.prepareStatement(query)
 
-        stm3.setInt(1, id)
-        stm3.setInt(2, skill_id)
+        stm.setInt(1, id)
+        stm.setInt(2, skillId)
 
         try {
-            stm3.executeUpdate()
+            int result = stm.executeUpdate()
+
+            if (result == 0) {
+                println "Falha ao inserir skill!"
+            } else {
+                println "skill com id - ${skillId} inserida com sucesso!"
+            }
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
-            stm1.close()
-            stm2.close()
-            stm3.close()
+            stm.close()
         }
     }
 
@@ -143,6 +116,9 @@ class JobVacancyDAO {
             }
         } catch (SQLException e) {
             println e
+        } finally {
+            connection.close()
+            stm.close()
         }
     }
 
@@ -175,6 +151,19 @@ class JobVacancyDAO {
         } finally {
             connection.close()
             stm.close()
+        }
+    }
+
+    private static void printJobVacancies(ResultSet result) {
+        while (result.next()) {
+            String candidate = "id - " + result.getInt("id") + "\n" +
+                    "nome - " +  result.getString("name") + "\n" +
+                    "descrição - " + result.getString("description") + "\n" +
+                    "estado - " + result.getString("state") + "\n" +
+                    "cidade - " + result.getString("city") + "\n" +
+                    "skills - " + result.getArray("skills") + "\n"
+
+            println candidate
         }
     }
 }
