@@ -1,11 +1,11 @@
 package DAO
 
-import Classes.JobVacancy
+import Models.JobVacancy
 
 import java.sql.*
 
 class JobVacancyDAO {
-    ConnectionDAO connectionDAO =  new ConnectionDAO()
+    ConnectionDB connectionDAO =  new ConnectionDB()
     SkillDAO skillDAO = new SkillDAO()
 
     void showJobVacancies() {
@@ -33,7 +33,7 @@ class JobVacancyDAO {
 
     static int insertJobVacancy(JobVacancy jobVacancy) {
         int id = 0
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         String query = "INSERT INTO job_vacancies (name, state, city, description, company_id)  " +
                 "VALUES (?,?,?,?,?);"
@@ -70,7 +70,7 @@ class JobVacancyDAO {
     }
 
     void insertSkillJobVacancy(int id, String skill){
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         int skillId = skillDAO.selectSkillForName(skill)
 
@@ -101,7 +101,7 @@ class JobVacancyDAO {
     }
 
     static void deleteJobVacancy(int id) {
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         String query = "DELETE FROM job_vacancies WHERE id=${id};"
 
@@ -123,7 +123,7 @@ class JobVacancyDAO {
     }
 
     static void updateJobVacancy(JobVacancy jobVacancy, int id) {
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         String query = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +
                 "description = ?, company_id = ? " +

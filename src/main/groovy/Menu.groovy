@@ -1,11 +1,12 @@
-import Actions.CandidatesActions
-import Actions.CompaniesActions
-import Actions.JobVacanciesActions
+import Controllers.CandidatesController
+import Controllers.CompaniesController
+import Controllers.JobVacanciesController
+import Views.CandidateView
 
 class Menu {
-    CandidatesActions candidatesActions = new CandidatesActions()
-    CompaniesActions companiesActions = new CompaniesActions()
-    JobVacanciesActions jobVacanciesActions = new  JobVacanciesActions()
+    CandidateView candidateView = new CandidateView()
+    CompaniesController companiesActions = new CompaniesController()
+    JobVacanciesController jobVacanciesActions = new  JobVacanciesController()
 
     Scanner sc = new Scanner(System.in)
 
@@ -33,16 +34,16 @@ class Menu {
         while (op != 0) {
             switch (op){
                 case 1:
-                    candidatesActions.addCandidate()
+                    candidateView.addCandidate()
                     break
                 case 2:
-                    candidatesActions.updateCandidate()
+                    candidateView.updateCandidate()
                     break
                 case 3:
-                    candidatesActions.showCandidates()
+                    candidateView.showCandidates()
                     break
                 case 4:
-                    candidatesActions.deleteCandidate()
+                    candidateView.deleteCandidate()
                     break
                 case 5:
                     companiesActions.addCompany()
@@ -74,7 +75,6 @@ class Menu {
             }
 
             println menu
-
             op = sc.nextInt()
         }
     }

@@ -1,70 +1,76 @@
 package DAO
 
-import Classes.Candidate
+import Interfaces.ICandidateDAO
+import Models.Candidate
 
 import java.sql.*
+import java.text.SimpleDateFormat
 
-class CandidateDAO {
-    ConnectionDAO connectionDAO =  new ConnectionDAO()
+class CandidateDAO implements ICandidateDAO {
+    ConnectionDB connectionDB =  new ConnectionDB()
     SkillDAO skillDAO = new SkillDAO()
 
-    void showCandidates() {
-        Connection connection = connectionDAO.connection()
+    @Override
+    List<Candidate> selectCandidates() {
+        Connection connection = null
+        PreparedStatement stm = null
+        List<Candidate> candidates = new ArrayList<>()
 
-        String query = "SELECT cd.*, ARRAY_AGG(sk.name) skills FROM candidates AS cd INNER JOIN " +
+        String selectCandidatesWithSkills = "SELECT cd.*, ARRAY_AGG(sk.name) skills FROM candidates AS cd INNER JOIN " +
                 "candidate_skill AS ck " +
                 "ON cd.id = ck.candidate_id INNER JOIN " +
                 "skill AS sk " +
                 "ON ck.skill_id = sk.id " +
                 "GROUP BY cd.id;"
 
-        PreparedStatement stm = connection.prepareStatement(query)
-
         try{
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(selectCandidatesWithSkills)
+
             ResultSet result = stm.executeQuery()
-            printCandidates(result)
+
+            candidates = this.listCandidates(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
+            stm.close()
         }
+
+        return  candidates
     }
 
-    static int insertCandidate(Candidate candidate) {
+    @Override
+    int insertCandidate(Candidate candidate) {
+        Connection connection = null
+        PreparedStatement stm = null
         int id = 0
-        Connection connection = ConnectionDAO.connection()
 
-        String query = "INSERT INTO candidates (first_name, last_name, date_of_Birth," +
+        String insertCandidate = "INSERT INTO candidates (first_name, last_name, date_of_Birth," +
                 " email, cpf, country, cep, description, password)  " +
                 "VALUES (?,?,?,?,?,?,?,?,?);"
 
-        PreparedStatement stm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
-
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
-        stm.setString(1, candidate.firstName)
-        stm.setString(2, candidate.lastName)
-        stm.setDate(3, dateOf_birth)
-        stm.setString(4, candidate.email)
-        stm.setString(5, candidate.cpf)
-        stm.setString(6, candidate.country)
-        stm.setString(7, candidate.cep)
-        stm.setString(8, candidate.description)
-        stm.setString(9, candidate.password)
-
         try {
-            int result = stm.executeUpdate()
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(insertCandidate, Statement.RETURN_GENERATED_KEYS)
 
+            stm.setString(1, candidate.firstName)
+            stm.setString(2, candidate.lastName)
+            stm.setDate(3, dateOf_birth)
+            stm.setString(4, candidate.email)
+            stm.setString(5, candidate.cpf)
+            stm.setString(6, candidate.country)
+            stm.setString(7, candidate.cep)
+            stm.setString(8, candidate.description)
+            stm.setString(9, candidate.password)
+
+            stm.executeUpdate()
             ResultSet rs = stm.getGeneratedKeys()
 
             if (rs.next()) {
                 id = rs.getInt(1)
-            }
-
-            if (result == 0) {
-                println "Falha ao inserir candidato!"
-            } else {
-                println "Candidado ${candidate.firstName} com id - ${id} inserido com sucesso!"
             }
         } catch (SQLException e) {
             e.printStackTrace()
@@ -76,8 +82,10 @@ class CandidateDAO {
         return id
     }
 
-    void insertSkillCandidate(int id, String skill) {
-        Connection connection = ConnectionDAO.connection()
+    @Override
+    int insertSkillCandidate(int id, String skill) {
+        Connection connection = null
+        PreparedStatement stm = null
 
         int  skillId = skillDAO.selectSkillForName(skill)
 
@@ -85,42 +93,44 @@ class CandidateDAO {
             skillId = skillDAO.insertSkill(skill)
         }
 
-        String query = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        stm.setInt(1, id)
-        stm.setInt(2, skillId)
+        String insertSkillCandidate = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
 
         try {
-            int result = stm.executeUpdate()
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(insertSkillCandidate)
 
-            if (result == 0) {
-                println "Falha ao inserir skill!"
-            } else {
-                println "skill com id - ${skillId} inserida com sucesso!"
-            }
+            stm.setInt(1, id)
+            stm.setInt(2, skillId)
+
+            stm.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return skillId
     }
 
-    static void deleteCandidate(int id) {
-        Connection connection = ConnectionDAO.connection()
+    @Override
+    boolean deleteCandidate(int id) {
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean hasDelete = false
 
-        String query = "DELETE FROM candidates WHERE id=${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
+        String deleteCandidate = "DELETE FROM candidates WHERE id= ?;"
 
         try {
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(deleteCandidate)
+
+            stm.setInt(1, id)
+
             int result = stm.executeUpdate()
 
-            if (result == 0) {
-                println "Falha ao deletar candidato ou candidato inexistente!"
-            } else {
-                println "Candidado com id - ${id} deletado com sucesso!"
+            if (result != 0) {
+                hasDelete = true
             }
         } catch (SQLException e) {
             println e
@@ -128,61 +138,81 @@ class CandidateDAO {
             connection.close()
             stm.close()
         }
+
+        return hasDelete
     }
 
-    static void updateCandidate(Candidate candidate, int id) {
-        Connection connection = ConnectionDAO.connection()
+    @Override
+    boolean updateCandidate(Candidate candidate, int id) {
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean updateLines = false
 
         String query = "UPDATE candidates SET first_name = ?, last_name = ?, date_of_Birth = ?, " +
                 "email = ?, cpf = ?, country = ?, cep = ?, description = ?, password = ? " +
-                "WHERE id = ${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
+                "WHERE id = ?;"
 
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
-        stm.setString(1, candidate.firstName)
-        stm.setString(2, candidate.lastName)
-        stm.setDate(3, dateOf_birth)
-        stm.setString(4, candidate.email)
-        stm.setString(5, candidate.cpf)
-        stm.setString(6, candidate.country)
-        stm.setString(7, candidate.cep)
-        stm.setString(8, candidate.description)
-        stm.setString(9, candidate.password)
-
         try {
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(query)
+
+            stm.setString(1, candidate.firstName)
+            stm.setString(2, candidate.lastName)
+            stm.setDate(3, dateOf_birth)
+            stm.setString(4, candidate.email)
+            stm.setString(5, candidate.cpf)
+            stm.setString(6, candidate.country)
+            stm.setString(7, candidate.cep)
+            stm.setString(8, candidate.description)
+            stm.setString(9, candidate.password)
+            stm.setInt(9, id)
+
             int result = stm.executeUpdate()
 
-            if (result == 0) {
-                println "Falha ao atualizar candidato!"
-            } else {
-                println "Candidado atualizado com sucesso!"
+            if (result != 0) {
+                updateLines = true
             }
-
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return updateLines
     }
 
-    private static void printCandidates(ResultSet result) {
-        while (result.next()) {
-            String candidate = "id - " + result.getInt("id") + "\n" +
-                    "nome - " +  result.getString("first_name") + "\n" +
-                    "sobrenome - " + result.getString("last_name") + "\n" +
-                    "data de nascimento - " + result.getString("date_of_birth") + "\n" +
-                    "email - " + result.getString("email") + "\n" +
-                    "cpf - " + result.getString("cpf") + "\n" +
-                    "país - " + result.getString("country") + "\n" +
-                    "CEP - " + result.getString("cep") + "\n" +
-                    "descrição - " + result.getString("description") + "\n" +
-                    "senha - " + result.getString("password") + "\n" +
-                    "skills - " + result.getArray("skills") + "\n"
 
-            println candidate
+    @Override
+    List<Candidate> listCandidates(ResultSet result) {
+        List<Candidate> candidates = new ArrayList<>()
+
+        while (result.next()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
+            Date dateOfBirth = new Date(sdf.parse(result.getString("date_of_birth")).time)
+
+            Array array = result.getArray("skills");
+            String[] skills = (String[]) array.getArray();
+
+            Candidate candidate = new Candidate()
+
+            candidate.setId(result.getInt("id"))
+            candidate.setFirstName(result.getString("first_name"))
+            candidate.setLastName(result.getString("last_name"))
+            candidate.setDateOfBirth(dateOfBirth)
+            candidate.setEmail(result.getString("email"))
+            candidate.setCpf(result.getString("cpf"))
+            candidate.setCountry(result.getString("country"))
+            candidate.setCep(result.getString("cep"))
+            candidate.setDescription(result.getString("description"))
+            candidate.setPassword(result.getString("password"))
+            candidate.setSkills(skills)
+
+            candidates.add(candidate)
         }
+
+        return candidates
     }
 }

@@ -7,10 +7,10 @@ import java.sql.SQLException
 import java.sql.Statement
 
 class SkillDAO {
-    ConnectionDAO connectionDAO =  new ConnectionDAO()
+    ConnectionDB connectionDB =  new ConnectionDB()
 
-    static int selectSkillForName(String skill) {
-        Connection connection = ConnectionDAO.connection()
+    int selectSkillForName(String skill) {
+        Connection connection = connectionDB.connection()
 
         String query1 = "SELECT * FROM skill sk WHERE sk.name = '${skill}'";
         PreparedStatement stm = connection.prepareStatement(query1)
@@ -33,8 +33,8 @@ class SkillDAO {
         return skill_id
     }
 
-    static int insertSkill(String skill) {
-        Connection connection = ConnectionDAO.connection()
+    int insertSkill(String skill) {
+        Connection connection = connectionDB.connection()
         String query2 = "INSERT INTO skill (name) VALUES(?);"
         PreparedStatement stm = connection.prepareStatement(query2, Statement.RETURN_GENERATED_KEYS)
 

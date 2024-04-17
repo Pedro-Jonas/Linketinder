@@ -12,7 +12,7 @@ DB Designer
 3. Execulte
 ```bash
 gradle build
-```
+```~]1ç 
 4. Enfim execulte
 ```bash
 gradle run

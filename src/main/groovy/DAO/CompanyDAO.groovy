@@ -1,11 +1,11 @@
 package DAO
 
-import Classes.Company
+import Models.Company
 
 import java.sql.*
 
 class CompanyDAO {
-    ConnectionDAO connectionDAO =  new ConnectionDAO()
+    ConnectionDB connectionDAO =  new ConnectionDB()
 
     void showCompanies() {
         Connection connection = connectionDAO.connection()
@@ -26,7 +26,7 @@ class CompanyDAO {
 
     void insertCompany(Company company){
         int id = 0
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         String query = "INSERT INTO companies (name, cnpj, email," +
                 " description, country, cep, password)  " +
@@ -64,7 +64,7 @@ class CompanyDAO {
     }
 
     static void updateCompany(Company company, int id){
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         String query = "UPDATE companies SET name = ?, cnpj = ?, " +
                 "email = ?, description = ?, country = ?, cep = ?, password = ? " +
@@ -98,7 +98,7 @@ class CompanyDAO {
     }
 
     static void deleteCompany(int id){
-        Connection connection = ConnectionDAO.connection()
+        Connection connection = ConnectionDB.connection()
 
         String query = "DELETE FROM companies WHERE id=${id};"
 
