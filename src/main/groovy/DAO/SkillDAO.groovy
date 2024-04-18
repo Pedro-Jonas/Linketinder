@@ -1,53 +1,55 @@
 package DAO
 
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.Statement
+import java.sql.*
 
 class SkillDAO {
     ConnectionDB connectionDB =  new ConnectionDB()
 
     int selectSkillForName(String skill) {
-        Connection connection = connectionDB.connection()
+        Connection connection = null
+        PreparedStatement stm = null
+        int skillId = 0
 
-        String query1 = "SELECT * FROM skill sk WHERE sk.name = '${skill}'";
-        PreparedStatement stm = connection.prepareStatement(query1)
-
-        int skill_id = 0
+        String selectSkillForName = "SELECT * FROM skill sk WHERE sk.name = ?";
 
         try {
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(selectSkillForName)
+
+            stm.setString(1, skill)
+
             ResultSet result = stm.executeQuery()
 
             while (result.next()) {
-                skill_id = result.getInt("id")
+                skillId = result.getInt("id")
             }
-
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
-        return skill_id
+        return skillId
     }
 
     int insertSkill(String skill) {
-        Connection connection = connectionDB.connection()
-        String query2 = "INSERT INTO skill (name) VALUES(?);"
-        PreparedStatement stm = connection.prepareStatement(query2, Statement.RETURN_GENERATED_KEYS)
+        Connection connection = null
+        PreparedStatement stm = null
+        int skillId = 0
 
-        stm.setString(1, skill)
-
-        int skill_id = 0
+        String insertSkill = "INSERT INTO skill (name) VALUES(?);"
 
         try {
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(insertSkill, Statement.RETURN_GENERATED_KEYS)
+
+            stm.setString(1, skill)
+
             stm.execute()
             ResultSet rs = stm.getGeneratedKeys()
 
             if (rs.next()) {
-                skill_id = rs.getInt(1)
+                skillId = rs.getInt(1)
             }
         } catch (SQLException e) {
             e.printStackTrace()
@@ -56,6 +58,6 @@ class SkillDAO {
             stm.close()
         }
 
-        return skill_id
+        return skillId
     }
 }
