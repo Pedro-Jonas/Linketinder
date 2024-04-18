@@ -114,35 +114,6 @@ class CandidateDAO implements ICandidateDAO {
     }
 
     @Override
-    boolean deleteCandidate(int id) {
-        Connection connection = null
-        PreparedStatement stm = null
-        boolean hasDelete = false
-
-        String deleteCandidate = "DELETE FROM candidates WHERE id= ?;"
-
-        try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(deleteCandidate)
-
-            stm.setInt(1, id)
-
-            int result = stm.executeUpdate()
-
-            if (result != 0) {
-                hasDelete = true
-            }
-        } catch (SQLException e) {
-            println e
-        } finally {
-            connection.close()
-            stm.close()
-        }
-
-        return hasDelete
-    }
-
-    @Override
     boolean updateCandidate(Candidate candidate, int id) {
         Connection connection = null
         PreparedStatement stm = null
@@ -182,6 +153,35 @@ class CandidateDAO implements ICandidateDAO {
         }
 
         return updateLines
+    }
+
+    @Override
+    boolean deleteCandidate(int id) {
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean hasDelete = false
+
+        String deleteCandidate = "DELETE FROM candidates WHERE id= ?;"
+
+        try {
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(deleteCandidate)
+
+            stm.setInt(1, id)
+
+            int result = stm.executeUpdate()
+
+            if (result != 0) {
+                hasDelete = true
+            }
+        } catch (SQLException e) {
+            println e
+        } finally {
+            connection.close()
+            stm.close()
+        }
+
+        return hasDelete
     }
 
 

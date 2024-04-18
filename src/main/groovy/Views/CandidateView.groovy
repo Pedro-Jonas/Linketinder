@@ -77,25 +77,6 @@ class CandidateView {
         candidatesController.addSkillCandidate(skills, id)
     }
 
-    void deleteCandidate() {
-        boolean hasDelete = false
-
-        System.out.println "Digite o id do candidato que deseja deletar"
-        int id = sc.nextInt()
-
-        try {
-            hasDelete = candidatesController.deleteCandidate(id)
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        if (hasDelete) {
-            println "Candidado deletado com sucesso!"
-        } else {
-            println "Falha ao deletar candidato!"
-        }
-    }
-
     void updateCandidate() {
         boolean updateLines = false
         System.out.println "Digite o id do candidato que deseja atualizar"
@@ -113,6 +94,25 @@ class CandidateView {
             println "Candidado com id - ${id} atualizado com sucesso!"
         } else {
             println "Falha ao atualizar candidato!"
+        }
+    }
+
+    void deleteCandidate() {
+        boolean hasDelete = false
+
+        System.out.println "Digite o id do candidato que deseja deletar"
+        int id = sc.nextInt()
+
+        try {
+            hasDelete = candidatesController.deleteCandidate(id)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        if (hasDelete) {
+            println "Candidado deletado com sucesso!"
+        } else {
+            println "Falha ao deletar candidato!"
         }
     }
 

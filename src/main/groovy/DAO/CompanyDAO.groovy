@@ -1,116 +1,132 @@
 package DAO
 
+import Interfaces.ICompanyDAO
 import Models.Company
 
 import java.sql.*
 
-class CompanyDAO {
+class CompanyDAO implements ICompanyDAO {
     ConnectionDB connectionDAO =  new ConnectionDB()
 
-    void showCompanies() {
-        Connection connection = connectionDAO.connection()
+    @Override
+    List<Company> selectCompanies() {
+        Connection connection = null
+        PreparedStatement stm = null
+        List<Company> companies = new ArrayList<>()
 
-        String query = "SELECT * FROM companies;"
-
-        PreparedStatement stm = connection.prepareStatement(query)
+        String selectCompanies = "SELECT * FROM companies;"
 
         try{
+            connection = connectionDAO.connection()
+            stm = connection.prepareStatement(selectCompanies)
+
             ResultSet result = stm.executeQuery()
-            printCompanies(result)
+
+            companies = this.listCompanies(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
+            stm.close()
         }
+
+        return companies
     }
 
-    void insertCompany(Company company){
+    @Override
+    int insertCompany(Company company) {
+        Connection connection = null
+        PreparedStatement stm = null
         int id = 0
-        Connection connection = ConnectionDB.connection()
 
-        String query = "INSERT INTO companies (name, cnpj, email," +
+        String insertCompany = "INSERT INTO companies (name, cnpj, email," +
                 " description, country, cep, password)  " +
                 "VALUES (?,?,?,?,?,?,?);"
 
-        PreparedStatement stm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
-
-        stm.setString(1, company.name)
-        stm.setString(2, company.cnpj)
-        stm.setString(3, company.email)
-        stm.setString(4, company.description)
-        stm.setString(5, company.country)
-        stm.setString(6, company.cep)
-        stm.setString(7, company.password)
-
         try {
-            int result = stm.executeUpdate()
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(insertCompany, Statement.RETURN_GENERATED_KEYS)
+
+            stm.setString(1, company.name)
+            stm.setString(2, company.cnpj)
+            stm.setString(3, company.email)
+            stm.setString(4, company.description)
+            stm.setString(5, company.country)
+            stm.setString(6, company.cep)
+            stm.setString(7, company.password)
+
+            stm.executeUpdate()
             ResultSet rs = stm.getGeneratedKeys()
 
             if (rs.next()) {
                 id = rs.getInt(1)
             }
-
-            if (result == 0) {
-                println "Falha ao inserir empresa!"
-            } else {
-                println "Empresa ${company.name} com id - ${id} inserida com sucesso!"
-            }
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return id
     }
 
-    static void updateCompany(Company company, int id){
-        Connection connection = ConnectionDB.connection()
+    @Override
+    boolean updateCompany(Company company, int id){
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean updateLines = false
 
-        String query = "UPDATE companies SET name = ?, cnpj = ?, " +
+        String updateCompany = "UPDATE companies SET name = ?, cnpj = ?, " +
                 "email = ?, description = ?, country = ?, cep = ?, password = ? " +
-                "WHERE id = ${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        stm.setString(1, company.name)
-        stm.setString(2, company.cnpj)
-        stm.setString(3, company.email)
-        stm.setString(4, company.description)
-        stm.setString(5, company.country)
-        stm.setString(6, company.cep)
-        stm.setString(7, company.password)
+                "WHERE id = ?;"
 
         try {
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(updateCompany)
+
+            stm.setString(1, company.name)
+            stm.setString(2, company.cnpj)
+            stm.setString(3, company.email)
+            stm.setString(4, company.description)
+            stm.setString(5, company.country)
+            stm.setString(6, company.cep)
+            stm.setString(7, company.password)
+            stm.setInt(7, id)
+
             int result = stm.executeUpdate()
 
-            if (result == 0) {
-                println "Falha ao atualizar empresa!"
-            } else {
-                println "Empresa atualizada com sucesso!"
+            if (result != 0) {
+                updateLines = true
             }
-
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return updateLines
     }
 
-    static void deleteCompany(int id){
-        Connection connection = ConnectionDB.connection()
+    @Override
+    boolean deleteCompany(int id){
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean hasDelete = false
 
-        String query = "DELETE FROM companies WHERE id=${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
+        String deleteCompany = "DELETE FROM companies WHERE id = ?;"
 
         try {
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(deleteCompany)
+
+            stm.setInt(1, id)
+
             int result = stm.executeUpdate()
 
-            if (result == 0) {
-                println "Falha ao deletar empresa ou empresa inexistente!"
-            } else {
-                println "Empresa com id - ${id} deletada com sucesso!"
+            if (result != 0) {
+               hasDelete = true
             }
         } catch (SQLException e) {
             println e
@@ -118,20 +134,30 @@ class CompanyDAO {
             connection.close()
             stm.close()
         }
+
+        return hasDelete
     }
 
-    private static void printCompanies(ResultSet result) {
-        while (result.next()) {
-            String company = "id - " + result.getInt("id") + "\n" +
-                    "nome - " +  result.getString("name") + "\n" +
-                    "CNPJ - " + result.getString("cnpj") + "\n" +
-                    "email - " + result.getString("email") + "\n" +
-                    "descrição - " + result.getString("description") + "\n" +
-                    "país - " + result.getString("country") + "\n" +
-                    "CEP - " + result.getString("cep") + "\n" +
-                    "senha - " + result.getString("password") + "\n"
+    @Override
+    List<Company> listCompanies(ResultSet result) {
+        List<Company> companies = new ArrayList<>()
 
-            println company
+        while (result.next()) {
+
+            Company company = new Company()
+
+            company.setId(result.getInt("id"))
+            company.setName(result.getString("name"))
+            company.setEmail(result.getString("email"))
+            company.setCnpj(result.getString("cnpj"))
+            company.setCountry(result.getString("country"))
+            company.setCep(result.getString("cep"))
+            company.setDescription(result.getString("description"))
+            company.setPassword(result.getString("password"))
+
+            companies.add(company)
         }
+
+        return companies
     }
 }

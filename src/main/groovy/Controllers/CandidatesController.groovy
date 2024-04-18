@@ -12,8 +12,6 @@ class CandidatesController {
         this.candidateDAO = candidateDAO
     }
 
-    Scanner sc = new Scanner(System.in)
-
     List<Candidate> getCandidates() {
         List<Candidate> candidates = new ArrayList<>()
 
@@ -34,8 +32,20 @@ class CandidatesController {
         } catch (Exception e) {
             e.printStackTrace()
         }
-        
+
         return id
+    }
+
+    boolean updateCandidate(Candidate candidate, int id) {
+        boolean updateLines = false
+
+        try{
+            updateLines = candidateDAO.updateCandidate(candidate, id)
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return updateLines
     }
 
     boolean deleteCandidate(int id) {
@@ -48,18 +58,6 @@ class CandidatesController {
         }
 
         return hasDelete
-    }
-
-    boolean updateCandidate(Candidate candidate, int id) {
-        boolean updateLines = false
-
-        try{
-            updateLines = candidateDAO.updateCandidate(candidate, id)
-        } catch (Exception e) {
-            println e
-        }
-
-        return updateLines
     }
 
     void addSkillCandidate(List<String> skills, int id) {

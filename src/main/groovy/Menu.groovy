@@ -1,17 +1,17 @@
-import Controllers.CandidatesController
-import Controllers.CompaniesController
 import Controllers.JobVacanciesController
+
 import Views.CandidateView
+import Views.CompanyView
 
 class Menu {
     CandidateView candidateView = new CandidateView()
-    CompaniesController companiesActions = new CompaniesController()
+    CompanyView companyView = new CompanyView()
     JobVacanciesController jobVacanciesActions = new  JobVacanciesController()
 
     Scanner sc = new Scanner(System.in)
 
     String menu = """Digite a opção desejada: 
-    1 para inserir um novo candidato 
+    1 para inserir um novo candidato ,
     2 para atualizar um candidato 
     3 para listar todos os candidatos
     4 para deletar um candidado   
@@ -46,16 +46,16 @@ class Menu {
                     candidateView.deleteCandidate()
                     break
                 case 5:
-                    companiesActions.addCompany()
+                    companyView.addCompany()
                     break
                 case 6:
-                    companiesActions.updateCompany()
+                    companyView.updateCompany()
                     break
                 case 7:
-                    companiesActions.showCompanies()
+                    companyView.showCompanies()
                     break
                 case 8:
-                    companiesActions.deleteCompany()
+                    companyView.deleteCompany()
                     break
                 case 9:
                     jobVacanciesActions.addJobVacancy()

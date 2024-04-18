@@ -5,93 +5,57 @@ import DAO.CompanyDAO
 
 class CompaniesController {
 
-    CompanyDAO companyDAO = new CompanyDAO()
+    CompanyDAO companyDAO
 
-    Scanner sc = new Scanner(System.in)
-
-    void showCompanies() {
-
-        try{
-            companyDAO.showCompanies()
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
+    CompaniesController(CompanyDAO companyDAO) {
+        this.companyDAO = companyDAO
     }
 
-    void addCompany() {
-        Company company = creatNewCompany()
+    List<Company> getCompanies() {
+        List<Company> companies = new ArrayList<>()
 
         try{
-            companyDAO.insertCompany(company)
+            companies = companyDAO.selectCompanies()
         } catch (Exception e) {
             e.printStackTrace()
         }
+
+        return companies
     }
 
-    void deleteCompany() {
-
-        System.out.println "Digite o id do empresa que deseja deletar"
-        int id = sc.nextInt()
+    int addCompany(Company company) {
+        int id = 0
 
         try{
-            companyDAO.deleteCompany(id)
+            id = companyDAO.insertCompany(company)
         } catch (Exception e) {
             e.printStackTrace()
         }
+
+        return id
     }
 
-    void updateCompany() {
-
-        System.out.println "Digite o id da empresa que deseja atualizar"
-        int id = sc.nextInt()
-
-        Company company = creatNewCompany()
+    boolean updateCompany(Company company, int id) {
+        boolean updateLines = false
 
         try{
-            companyDAO.updateCompany(company, id)
+            updateLines = companyDAO.updateCompany(company, id)
         } catch (Exception e) {
             e.printStackTrace()
         }
+
+        return updateLines
     }
 
-    private static Company creatNewCompany() {
-        Scanner sc = new Scanner(System.in)
-
-        System.out.println "Digite o nome da empresa"
-        String name = sc.nextLine()
-
-        System.out.println "Digite o seu email corporativo"
-        String email = sc.nextLine()
-
-        System.out.println "Digite o seu CNPJ"
-        String cnpj = sc.nextLine()
-
-        System.out.println "Digite o seu país"
-        String county = sc.nextLine()
-
-        System.out.println "Digite o seu CEP"
-        String cep = sc.nextLine()
-
-        System.out.println "Digite a sua descrição"
-        String description = sc.nextLine()
-
-        System.out.println "Digite a sua senha"
-        String password = sc.nextLine()
-
-        Company company = new Company()
+    boolean deleteCompany(int id) {
+        boolean hasDelete = false
 
         try{
-            company.setName(name)
-            company.setEmail(email)
-            company.setCnpj(cnpj)
-            company.setCountry(county)
-            company.setCep(cep)
-            company.setDescription(description)
-            company.setPassword(password)
+            hasDelete = companyDAO.deleteCompany(id)
         } catch (Exception e) {
             e.printStackTrace()
         }
 
-        return company
+        return hasDelete
     }
 }
