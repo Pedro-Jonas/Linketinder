@@ -36,6 +36,16 @@ class CandidateController {
         return id
     }
 
+    void addSkillCandidate(List<String> skills, int id) {
+        skills.each { skill ->
+            try {
+                candidateDAO.insertSkillCandidate(id, skill)
+            } catch (Exception e) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     boolean updateCandidate(Candidate candidate, int id) {
         boolean updateLines = false
 
@@ -58,15 +68,5 @@ class CandidateController {
         }
 
         return hasDelete
-    }
-
-    void addSkillCandidate(List<String> skills, int id) {
-        skills.each { skill ->
-            try {
-                candidateDAO.insertSkillCandidate(id, skill)
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
-        }
     }
 }

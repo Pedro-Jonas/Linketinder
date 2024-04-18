@@ -62,16 +62,16 @@ class Menu {
                     companyView.deleteCompany()
                     break
                 case 9:
-                    jobVacanciesActions.addJobVacancy()
+                    jobVacancyView.addJobVacancy()
                     break
                 case 10:
-                    jobVacanciesActions.updateJobVacancy()
+                    jobVacancyView.updateJobVacancy()
                     break
                 case 11:
                     jobVacancyView.showJobVacancies()
                     break
                 case 12:
-                    jobVacanciesActions.deleteJobVacancy()
+                    jobVacancyView.deleteJobVacancy()
                     break
                 default:
                     println "Digite uma opção válida"

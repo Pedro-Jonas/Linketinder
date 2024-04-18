@@ -110,7 +110,7 @@ class CandidateView {
         }
 
         if (hasDelete) {
-            println "Candidado deletado com sucesso!"
+            println "Candidado com id - ${id} deletado com sucesso!"
         } else {
             println "Falha ao deletar candidato!"
         }

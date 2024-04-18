@@ -48,27 +48,21 @@ class JobVacancyDAO implements IJobVacancyDAO{
         String insertJobVacancy = "INSERT INTO job_vacancies (name, state, city, description, company_id)  " +
                 "VALUES (?,?,?,?,?);"
 
-        stm.setString(1, jobVacancy.name)
-        stm.setString(2, jobVacancy.state)
-        stm.setString(3, jobVacancy.city)
-        stm.setString(4, jobVacancy.description)
-        stm.setInt(5, jobVacancy.companyId)
-
         try {
             connection = ConnectionDB.connection()
             stm = connection.prepareStatement(insertJobVacancy, Statement.RETURN_GENERATED_KEYS)
+
+            stm.setString(1, jobVacancy.name)
+            stm.setString(2, jobVacancy.state)
+            stm.setString(3, jobVacancy.city)
+            stm.setString(4, jobVacancy.description)
+            stm.setInt(5, jobVacancy.companyId)
 
             stm.executeUpdate()
             ResultSet rs = stm.getGeneratedKeys()
 
             if (rs.next()) {
                 id = rs.getInt(1)
-            }
-
-            if (id == 0) {
-                println "Falha ao inserir vaga!"
-            } else {
-                println "Vaga com id - ${id} inserido com sucesso!"
             }
         } catch (SQLException e) {
             e.printStackTrace()
