@@ -1,17 +1,15 @@
 package Controllers
 
+import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
-import DAO.JobVacancyDAO
 
 class JobVacancyController {
 
-    JobVacancyDAO jobVacancyDAO
+    IJobVacancyDAO jobVacancyDAO
 
-    JobVacancyController(JobVacancyDAO jobVacancyDAO) {
+    JobVacancyController(IJobVacancyDAO jobVacancyDAO) {
         this.jobVacancyDAO = jobVacancyDAO
     }
-
-    Scanner sc = new Scanner(System.in)
 
     List<JobVacancy> getJobVacancies() {
         List<JobVacancy> vacancies = new ArrayList<>()

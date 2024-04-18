@@ -1,14 +1,13 @@
 package Controllers
 
-
+import Interfaces.ICandidateDAO
 import Models.Candidate
-import DAO.CandidateDAO
 
 class CandidateController {
 
-    CandidateDAO candidateDAO
+    ICandidateDAO candidateDAO
 
-    CandidateController(CandidateDAO candidateDAO) {
+    CandidateController(ICandidateDAO candidateDAO) {
         this.candidateDAO = candidateDAO
     }
 

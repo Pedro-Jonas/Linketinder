@@ -1,13 +1,13 @@
 package Controllers
 
+import Interfaces.ICompanyDAO
 import Models.Company
-import DAO.CompanyDAO
 
 class CompanyController {
 
-    CompanyDAO companyDAO
+    ICompanyDAO companyDAO
 
-    CompanyController(CompanyDAO companyDAO) {
+    CompanyController(ICompanyDAO companyDAO) {
         this.companyDAO = companyDAO
     }
 

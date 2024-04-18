@@ -8,33 +8,33 @@ import org.junit.jupiter.api.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
-class CandidatesControllerTest {
+class CandidateControllerTest {
 
     ICandidateDAO candidateDAO = mock(ICandidateDAO.class)
     CandidateController candidatesController = new CandidateController(candidateDAO)
-    Candidate candidate = new Candidate()
 
     @Test
-    void getCandidates() {
+    void getCandidatesTest() {
         //given
         List<Candidate> candidates = new ArrayList<>()
 
-        SimpleDateFormat format = new SimpleDateFormat('dd/MM/yyyy')
+        Candidate candidate = new Candidate()
 
-        candidate.setFirstName('Pedro')
-        candidate.setLastName('Araújo')
-        candidate.setDateOfBirth(format.parse('11/11/1999'))
-        candidate.setEmail('jonas@gmail.com')
-        candidate.setCpf('111.111.111-11')
-        candidate.setCountry('Brasil')
-        candidate.setCep('11111-111')
-        candidate.setDescription('Essa é a descrição')
-        candidate.setPassword('jonas1111')
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy")
+
+        candidate.setFirstName("Candidato1")
+        candidate.setLastName("Candidato1")
+        candidate.setDateOfBirth(format.parse("12/12/1999"))
+        candidate.setEmail("candidato1@gmail.com")
+        candidate.setCpf("111.111.111-11")
+        candidate.setCountry("País1")
+        candidate.setCep("11111-111")
+        candidate.setDescription("Descrição")
+        candidate.setPassword("senha1111")
 
         candidates.add(candidate)
 
         when(candidateDAO.selectCandidates()).thenReturn(candidates)
-
         //when
         List<Candidate> result = candidatesController.getCandidates()
 
@@ -43,8 +43,9 @@ class CandidatesControllerTest {
     }
 
     @Test
-    void addCandidate() {
+    void addCandidateTest() {
         //given
+        Candidate candidate = new Candidate()
         when(candidateDAO.insertCandidate(candidate)).thenReturn(1)
 
         //when
@@ -55,7 +56,21 @@ class CandidatesControllerTest {
     }
 
     @Test
-    void deleteCandidate() {
+    void updateCandidateTest() {
+        //given
+        Candidate candidate = new Candidate()
+        when(candidateDAO.updateCandidate(candidate, 1)).thenReturn(true)
+
+        //when
+        boolean result = candidatesController.updateCandidate(candidate, 1)
+
+        //then
+        assertEquals(true, result)
+    }
+
+
+    @Test
+    void deleteCandidateTest() {
         //given
         when(candidateDAO.deleteCandidate(1)).thenReturn(true)
 
