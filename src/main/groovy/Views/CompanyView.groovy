@@ -1,12 +1,12 @@
 package Views
 
-import Controllers.CompaniesController
+import Controllers.CompanyController
 import DAO.CompanyDAO
 import Models.Company
 
 class CompanyView {
     CompanyDAO companyDAO = new CompanyDAO()
-    CompaniesController companiesController = new CompaniesController(companyDAO)
+    CompanyController companiesController = new CompanyController(companyDAO)
     Scanner sc = new Scanner(System.in)
 
     void showCompanies() {

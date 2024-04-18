@@ -1,44 +1,52 @@
 package DAO
 
+import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
 
 import java.sql.*
 
-class JobVacancyDAO {
+class JobVacancyDAO implements IJobVacancyDAO{
     ConnectionDB connectionDAO =  new ConnectionDB()
     SkillDAO skillDAO = new SkillDAO()
 
-    void showJobVacancies() {
-        Connection connection = connectionDAO.connection()
+    @Override
+    List<JobVacancy> selectJobVacancies() {
+        Connection connection = null
+        PreparedStatement stm = null
+        List<JobVacancy> vacancies = new ArrayList<>()
 
-        String query = "SELECT jv.*, ARRAY_AGG(sk.name) skills FROM job_vacancies AS jv INNER JOIN " +
+        String selectJobVacanciesWithSkills = "SELECT jv.*, ARRAY_AGG(sk.name) skills FROM job_vacancies AS jv INNER JOIN " +
                 "job_vacancies_skill AS jsk " +
                 "ON jv.id = jsk.job_vacancy_id INNER JOIN " +
                 "skill AS sk " +
                 "ON jsk.skill_id = sk.id " +
                 "GROUP BY jv.id;"
 
-        PreparedStatement stm = connection.prepareStatement(query)
-
         try{
+            connection = connectionDAO.connection()
+            stm = connection.prepareStatement(selectJobVacanciesWithSkills)
+
             ResultSet result = stm.executeQuery()
-            printJobVacancies(result)
+
+            vacancies = listJobVacancies(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return vacancies
     }
 
-    static int insertJobVacancy(JobVacancy jobVacancy) {
+    @Override
+    int insertJobVacancy(JobVacancy jobVacancy) {
+        Connection connection = null
+        PreparedStatement stm = null
         int id = 0
-        Connection connection = ConnectionDB.connection()
 
-        String query = "INSERT INTO job_vacancies (name, state, city, description, company_id)  " +
+        String insertJobVacancy = "INSERT INTO job_vacancies (name, state, city, description, company_id)  " +
                 "VALUES (?,?,?,?,?);"
-
-        PreparedStatement stm = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
 
         stm.setString(1, jobVacancy.name)
         stm.setString(2, jobVacancy.state)
@@ -47,17 +55,20 @@ class JobVacancyDAO {
         stm.setInt(5, jobVacancy.companyId)
 
         try {
-            int result = stm.executeUpdate()
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(insertJobVacancy, Statement.RETURN_GENERATED_KEYS)
+
+            stm.executeUpdate()
             ResultSet rs = stm.getGeneratedKeys()
 
             if (rs.next()) {
                 id = rs.getInt(1)
             }
 
-            if (result == 0) {
+            if (id == 0) {
                 println "Falha ao inserir vaga!"
             } else {
-                println "Vaga ${jobVacancy.name} com id - ${id} inserido com sucesso!"
+                println "Vaga com id - ${id} inserido com sucesso!"
             }
         } catch (SQLException e) {
             e.printStackTrace()
@@ -69,8 +80,10 @@ class JobVacancyDAO {
         return id
     }
 
-    void insertSkillJobVacancy(int id, String skill){
-        Connection connection = ConnectionDB.connection()
+    @Override
+    int insertSkillJobVacancy(int id, String skill){
+        Connection connection = null
+        PreparedStatement stm = null
 
         int skillId = skillDAO.selectSkillForName(skill)
 
@@ -78,92 +91,112 @@ class JobVacancyDAO {
             skillId = skillDAO.insertSkill(skill)
         }
 
-        String query = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        stm.setInt(1, id)
-        stm.setInt(2, skillId)
+        String insertSkillJobVacancy = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
 
         try {
-            int result = stm.executeUpdate()
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(insertSkillJobVacancy)
 
-            if (result == 0) {
-                println "Falha ao inserir skill!"
-            } else {
-                println "skill com id - ${skillId} inserida com sucesso!"
-            }
+            stm.setInt(1, id)
+            stm.setInt(2, skillId)
+
+            stm.executeUpdate()
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return skillId
     }
 
-    static void deleteJobVacancy(int id) {
-        Connection connection = ConnectionDB.connection()
+    @Override
+    boolean updateJobVacancy(JobVacancy jobVacancy, int id) {
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean updateLines = false
 
-        String query = "DELETE FROM job_vacancies WHERE id=${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        try {
-            int result = stm.executeUpdate()
-            if (result == 0) {
-                println "Falha ao deletar vaga ou vaga inexistente!"
-            } else {
-                println "Vaga com id - ${id} deletada com sucesso!"
-            }
-        } catch (SQLException e) {
-            println e
-        } finally {
-            connection.close()
-            stm.close()
-        }
-    }
-
-    static void updateJobVacancy(JobVacancy jobVacancy, int id) {
-        Connection connection = ConnectionDB.connection()
-
-        String query = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +
+        String updateJobVacancy = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +
                 "description = ?, company_id = ? " +
-                "WHERE id = ${id};"
-
-        PreparedStatement stm = connection.prepareStatement(query)
-
-        stm.setString(1, jobVacancy.name)
-        stm.setString(2, jobVacancy.state)
-        stm.setString(3, jobVacancy.city)
-        stm.setString(4, jobVacancy.description)
-        stm.setInt(5, jobVacancy.companyId)
+                "WHERE id = ?;"
 
         try {
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(updateJobVacancy)
+
+            stm.setString(1, jobVacancy.name)
+            stm.setString(2, jobVacancy.state)
+            stm.setString(3, jobVacancy.city)
+            stm.setString(4, jobVacancy.description)
+            stm.setInt(5, jobVacancy.companyId)
+            stm.setInt(6, id)
+
             int result = stm.executeUpdate()
 
-            if (result == 0) {
-                println "Falha ao atualizar vaga!"
-            } else {
-                println "Vaga atualizada com sucesso!"
+            if (result != 0) {
+                updateLines = true
             }
-
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             connection.close()
             stm.close()
         }
+
+        return updateLines
     }
 
-    private static void printJobVacancies(ResultSet result) {
-        while (result.next()) {
-            String candidate = "id - " + result.getInt("id") + "\n" +
-                    "nome - " +  result.getString("name") + "\n" +
-                    "descrição - " + result.getString("description") + "\n" +
-                    "estado - " + result.getString("state") + "\n" +
-                    "cidade - " + result.getString("city") + "\n" +
-                    "skills - " + result.getArray("skills") + "\n"
+    @Override
+    boolean deleteJobVacancy(int id) {
+        Connection connection = null
+        PreparedStatement stm = null
+        boolean hasDelete = false
 
-            println candidate
+        String deleteJobVacancy = "DELETE FROM job_vacancies WHERE id = ?;"
+
+        try {
+            connection = ConnectionDB.connection()
+            stm = connection.prepareStatement(deleteJobVacancy)
+
+            stm.setInt(1, id)
+
+            int result = stm.executeUpdate()
+
+            if (result != 0) {
+                hasDelete = true
+            }
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            connection.close()
+            stm.close()
         }
+
+        return hasDelete
+    }
+
+    @Override
+    List<JobVacancy> listJobVacancies(ResultSet result) {
+        List<JobVacancy> vacancies = new ArrayList<>()
+
+        while (result.next()) {
+            JobVacancy vacancy = new JobVacancy()
+
+            Array array = result.getArray("skills");
+            String[] skills = (String[]) array.getArray();
+
+            vacancy.setId(result.getInt("id"))
+            vacancy.setCompanyId(result.getInt("company_id"))
+            vacancy.setName(result.getString("name"))
+            vacancy.setDescription(result.getString("description"))
+            vacancy.setState(result.getString("state"))
+            vacancy.setCity(result.getString("city"))
+            vacancy.setSkills(skills)
+
+            vacancies.add(vacancy)
+        }
+
+        return vacancies
     }
 }

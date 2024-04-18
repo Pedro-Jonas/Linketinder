@@ -1,6 +1,6 @@
 package Views
 
-import Controllers.CandidatesController
+import Controllers.CandidateController
 import DAO.CandidateDAO
 import Models.Candidate
 
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat
 class CandidateView {
 
     CandidateDAO candidateDAO = new CandidateDAO()
-    CandidatesController candidatesController = new CandidatesController(candidateDAO)
+    CandidateController candidatesController = new CandidateController(candidateDAO)
     Scanner sc = new Scanner(System.in)
 
     void showCandidates() {
@@ -22,7 +22,7 @@ class CandidateView {
         }
 
         if (candidates == null){
-            println 'Não foi possivel mostrar candidatos!'
+            println "Não foi possivel mostrar candidatos!"
         } else {
             printCandidates(candidates)
         }

@@ -129,7 +129,7 @@ class CompanyDAO implements ICompanyDAO {
                hasDelete = true
             }
         } catch (SQLException e) {
-            println e
+            e.printStackTrace()
         } finally {
             connection.close()
             stm.close()

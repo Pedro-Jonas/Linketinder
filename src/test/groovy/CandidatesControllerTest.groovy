@@ -1,4 +1,4 @@
-import Controllers.CandidatesController
+import Controllers.CandidateController
 import Interfaces.ICandidateDAO
 import Models.Candidate
 
@@ -11,7 +11,7 @@ import static org.mockito.Mockito.*
 class CandidatesControllerTest {
 
     ICandidateDAO candidateDAO = mock(ICandidateDAO.class)
-    CandidatesController candidatesController = new CandidatesController(candidateDAO)
+    CandidateController candidatesController = new CandidateController(candidateDAO)
     Candidate candidate = new Candidate()
 
     @Test

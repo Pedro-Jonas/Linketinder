@@ -5,7 +5,7 @@ class Company extends Users {
     String cnpj
 
     @Override
-    public String toString() {
+    String toString() {
         return "id - " + id + "\n" +
                 "name - " + name + "\n" +
                 "email - " + email + "\n" +

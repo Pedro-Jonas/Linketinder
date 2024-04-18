@@ -3,19 +3,26 @@ package Controllers
 import Models.JobVacancy
 import DAO.JobVacancyDAO
 
-class JobVacanciesController {
+class JobVacancyController {
 
-    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
+    JobVacancyDAO jobVacancyDAO
+
+    JobVacancyController(JobVacancyDAO jobVacancyDAO) {
+        this.jobVacancyDAO = jobVacancyDAO
+    }
 
     Scanner sc = new Scanner(System.in)
 
-    void showJobVacancies() {
+    List<JobVacancy> getJobVacancies() {
+        List<JobVacancy> vacancies = new ArrayList<>()
 
         try {
-            jobVacancyDAO.showJobVacancies()
+            vacancies = jobVacancyDAO.selectJobVacancies()
         } catch (Exception e) {
             e.printStackTrace()
         }
+
+        return vacancies
     }
 
     void addJobVacancy() {
@@ -32,18 +39,6 @@ class JobVacanciesController {
 
         if (id != 0){
             this.addSkillJobVacancy(id)
-        }
-    }
-
-    void deleteJobVacancy(){
-
-        System.out.println "Digite o id da vaga que deseja deletar"
-        int id = sc.nextInt()
-
-        try{
-            jobVacancyDAO.deleteJobVacancy(id)
-        } catch (Exception e) {
-            e.printStackTrace()
         }
     }
 
@@ -123,6 +118,18 @@ class JobVacanciesController {
             }
             println text
             op = sc.nextInt()
+        }
+    }
+
+    void deleteJobVacancy(){
+
+        System.out.println "Digite o id da vaga que deseja deletar"
+        int id = sc.nextInt()
+
+        try{
+            jobVacancyDAO.deleteJobVacancy(id)
+        } catch (Exception e) {
+            e.printStackTrace()
         }
     }
 }

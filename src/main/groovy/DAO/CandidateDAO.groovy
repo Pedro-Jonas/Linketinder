@@ -175,7 +175,7 @@ class CandidateDAO implements ICandidateDAO {
                 hasDelete = true
             }
         } catch (SQLException e) {
-            println e
+            e.printStackTrace()
         } finally {
             connection.close()
             stm.close()

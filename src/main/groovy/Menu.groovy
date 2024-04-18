@@ -1,12 +1,16 @@
-import Controllers.JobVacanciesController
-
+import Controllers.JobVacancyController
+import DAO.JobVacancyDAO
 import Views.CandidateView
 import Views.CompanyView
+import Views.JobVacancyView
 
 class Menu {
     CandidateView candidateView = new CandidateView()
     CompanyView companyView = new CompanyView()
-    JobVacanciesController jobVacanciesActions = new  JobVacanciesController()
+
+    JobVacancyView jobVacancyView = new JobVacancyView()
+    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
+    JobVacancyController jobVacanciesActions = new  JobVacancyController(jobVacancyDAO)
 
     Scanner sc = new Scanner(System.in)
 
@@ -64,7 +68,7 @@ class Menu {
                     jobVacanciesActions.updateJobVacancy()
                     break
                 case 11:
-                    jobVacanciesActions.showJobVacancies()
+                    jobVacancyView.showJobVacancies()
                     break
                 case 12:
                     jobVacanciesActions.deleteJobVacancy()

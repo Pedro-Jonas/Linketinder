@@ -3,11 +3,11 @@ package Controllers
 import Models.Company
 import DAO.CompanyDAO
 
-class CompaniesController {
+class CompanyController {
 
     CompanyDAO companyDAO
 
-    CompaniesController(CompanyDAO companyDAO) {
+    CompanyController(CompanyDAO companyDAO) {
         this.companyDAO = companyDAO
     }
 
