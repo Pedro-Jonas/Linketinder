@@ -132,5 +132,4 @@ class SkillDAO implements ISkillDAO {
 
         return skillId
     }
-
 }

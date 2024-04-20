@@ -17,5 +17,10 @@ gradle build
 ```bash
 gradle run
 ```
+## Melhorias de Refatorção
+1. Criação de Testes
+2. Criação de Interfaces
+3. Separação de Responsabilidades
+4. Aplicação de princípios SOLID
 
 <!-- Pedro Jonas Nunes de Araújo -->
