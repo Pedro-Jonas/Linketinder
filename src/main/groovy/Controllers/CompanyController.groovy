@@ -11,18 +11,6 @@ class CompanyController {
         this.companyDAO = companyDAO
     }
 
-    List<Company> getCompanies() {
-        List<Company> companies = new ArrayList<>()
-
-        try{
-            companies = companyDAO.selectCompanies()
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return companies
-    }
-
     int addCompany(Company company) {
         int id = 0
 
@@ -33,6 +21,18 @@ class CompanyController {
         }
 
         return id
+    }
+
+    List<Company> getCompanies() {
+        List<Company> companies = new ArrayList<>()
+
+        try{
+            companies = companyDAO.selectCompanies()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return companies
     }
 
     boolean updateCompany(Company company, int id) {

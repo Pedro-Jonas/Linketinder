@@ -11,18 +11,6 @@ class CandidateController {
         this.candidateDAO = candidateDAO
     }
 
-    List<Candidate> getCandidates() {
-        List<Candidate> candidates = new ArrayList<>()
-
-        try{
-            candidates = candidateDAO.selectCandidates()
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return candidates
-    }
-
     int addCandidate(Candidate candidate){
         int id = 0
 
@@ -35,14 +23,16 @@ class CandidateController {
         return id
     }
 
-    void addSkillCandidate(List<String> skills, int id) {
-        skills.each { skill ->
-            try {
-                candidateDAO.insertSkillCandidate(id, skill)
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
+    List<Candidate> getCandidates() {
+        List<Candidate> candidates = new ArrayList<>()
+
+        try{
+            candidates = candidateDAO.selectCandidates()
+        } catch (Exception e) {
+            e.printStackTrace()
         }
+
+        return candidates
     }
 
     boolean updateCandidate(Candidate candidate, int id) {

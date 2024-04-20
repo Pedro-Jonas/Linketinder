@@ -1,42 +1,17 @@
 package DAO
 
+import Interfaces.IConnectionDB
 import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
 
 import java.sql.*
 
 class JobVacancyDAO implements IJobVacancyDAO{
-    ConnectionDB connectionDAO =  new ConnectionDB()
-    SkillDAO skillDAO = new SkillDAO()
 
-    @Override
-    List<JobVacancy> selectJobVacancies() {
-        Connection connection = null
-        PreparedStatement stm = null
-        List<JobVacancy> vacancies = new ArrayList<>()
+    IConnectionDB connectionDB
 
-        String selectJobVacanciesWithSkills = "SELECT jv.*, ARRAY_AGG(sk.name) skills FROM job_vacancies AS jv INNER JOIN " +
-                "job_vacancies_skill AS jsk " +
-                "ON jv.id = jsk.job_vacancy_id INNER JOIN " +
-                "skill AS sk " +
-                "ON jsk.skill_id = sk.id " +
-                "GROUP BY jv.id;"
-
-        try{
-            connection = connectionDAO.connection()
-            stm = connection.prepareStatement(selectJobVacanciesWithSkills)
-
-            ResultSet result = stm.executeQuery()
-
-            vacancies = listJobVacancies(result)
-        } catch (SQLException e) {
-            e.printStackTrace()
-        } finally {
-            connection.close()
-            stm.close()
-        }
-
-        return vacancies
+    JobVacancyDAO(IConnectionDB connectionDB) {
+        this.connectionDB = connectionDB
     }
 
     @Override
@@ -49,7 +24,7 @@ class JobVacancyDAO implements IJobVacancyDAO{
                 "VALUES (?,?,?,?,?);"
 
         try {
-            connection = ConnectionDB.connection()
+            connection = connectionDB.connection()
             stm = connection.prepareStatement(insertJobVacancy, Statement.RETURN_GENERATED_KEYS)
 
             stm.setString(1, jobVacancy.name)
@@ -75,26 +50,25 @@ class JobVacancyDAO implements IJobVacancyDAO{
     }
 
     @Override
-    int insertSkillJobVacancy(int id, String skill){
+    List<JobVacancy> selectJobVacancies() {
         Connection connection = null
         PreparedStatement stm = null
+        List<JobVacancy> vacancies = new ArrayList<>()
 
-        int skillId = skillDAO.selectSkillForName(skill)
+        String selectJobVacanciesWithSkills = "SELECT jv.*, ARRAY_AGG(sk.name) skills FROM job_vacancies AS jv INNER JOIN " +
+                "job_vacancies_skill AS jsk " +
+                "ON jv.id = jsk.job_vacancy_id INNER JOIN " +
+                "skill AS sk " +
+                "ON jsk.skill_id = sk.id " +
+                "GROUP BY jv.id;"
 
-        if (skillId == 0){
-            skillId = skillDAO.insertSkill(skill)
-        }
+        try{
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(selectJobVacanciesWithSkills)
 
-        String insertSkillJobVacancy = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
+            ResultSet result = stm.executeQuery()
 
-        try {
-            connection = ConnectionDB.connection()
-            stm = connection.prepareStatement(insertSkillJobVacancy)
-
-            stm.setInt(1, id)
-            stm.setInt(2, skillId)
-
-            stm.executeUpdate()
+            vacancies = listJobVacancies(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -102,7 +76,7 @@ class JobVacancyDAO implements IJobVacancyDAO{
             stm.close()
         }
 
-        return skillId
+        return vacancies
     }
 
     @Override
@@ -116,7 +90,7 @@ class JobVacancyDAO implements IJobVacancyDAO{
                 "WHERE id = ?;"
 
         try {
-            connection = ConnectionDB.connection()
+            connection = connectionDB.connection()
             stm = connection.prepareStatement(updateJobVacancy)
 
             stm.setString(1, jobVacancy.name)
@@ -150,7 +124,7 @@ class JobVacancyDAO implements IJobVacancyDAO{
         String deleteJobVacancy = "DELETE FROM job_vacancies WHERE id = ?;"
 
         try {
-            connection = ConnectionDB.connection()
+            connection = connectionDB.connection()
             stm = connection.prepareStatement(deleteJobVacancy)
 
             stm.setInt(1, id)

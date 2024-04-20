@@ -1,13 +1,18 @@
 package Views
 
 import Controllers.JobVacancyController
+import DAO.ConnectionPostgresDB
 import DAO.JobVacancyDAO
 import Models.JobVacancy
 
 class JobVacancyView {
 
-    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
+    ConnectionPostgresDB connectionDB = new ConnectionPostgresDB()
+    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO(connectionDB)
     JobVacancyController jobVacanciesController = new JobVacancyController(jobVacancyDAO)
+
+    SkillView skillView = new SkillView()
+
     Scanner sc = new Scanner(System.in)
 
     void showJobVacancies() {
@@ -40,40 +45,10 @@ class JobVacancyView {
         if (id == 0) {
             println "Falha ao inserir vaga!"
         } else {
-            createSkillsJobVacancy(id)
+            skillView.createSkillsJobVacancy(id)
             println "Vaga com id - ${id} inserida com sucesso!"
         }
 
-    }
-
-    private void createSkillsJobVacancy(int id) {
-        List<String> skills = new ArrayList<>()
-
-        String text = "Digite a opção desejada: \n" +
-                "1 para inserir mais uma habilidade \n" +
-                "0 para parar a inserção \n"
-
-        int op = 1;
-
-        while (op != 0) {
-            Scanner sc = new Scanner(System.in)
-
-            switch (op){
-                case 1:
-                    System.out.println "Digite a sua habilidade"
-                    String skill = sc.nextLine()
-
-                    skills.add(skill)
-                    break
-                default:
-                    println "Digite uma opção válida"
-                    break
-            }
-            println text
-            op = sc.nextInt()
-        }
-
-        jobVacanciesController.addSkillJobVacancy(skills, id)
     }
 
     void updateJobVacancy() {

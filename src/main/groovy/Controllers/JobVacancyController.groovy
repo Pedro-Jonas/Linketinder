@@ -11,18 +11,6 @@ class JobVacancyController {
         this.jobVacancyDAO = jobVacancyDAO
     }
 
-    List<JobVacancy> getJobVacancies() {
-        List<JobVacancy> vacancies = new ArrayList<>()
-
-        try {
-            vacancies = jobVacancyDAO.selectJobVacancies()
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return vacancies
-    }
-
     int addJobVacancy(JobVacancy vacancy) {
         int id = 0
 
@@ -35,6 +23,18 @@ class JobVacancyController {
         return id
     }
 
+    List<JobVacancy> getJobVacancies() {
+        List<JobVacancy> vacancies = new ArrayList<>()
+
+        try {
+            vacancies = jobVacancyDAO.selectJobVacancies()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return vacancies
+    }
+
     boolean updateJobVacancy(JobVacancy jobVacancy, int id) {
         boolean updateLines = false
 
@@ -45,16 +45,6 @@ class JobVacancyController {
         }
 
         return updateLines
-    }
-
-    void addSkillJobVacancy(List<String> skills, int id) {
-        skills.each { skill ->
-            try {
-                jobVacancyDAO.insertSkillJobVacancy(id, skill)
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
-        }
     }
 
     boolean deleteJobVacancy(int id){

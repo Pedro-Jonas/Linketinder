@@ -2,14 +2,19 @@ package Views
 
 import Controllers.CandidateController
 import DAO.CandidateDAO
+import DAO.ConnectionPostgresDB
 import Models.Candidate
 
 import java.text.SimpleDateFormat
 
 class CandidateView {
 
-    CandidateDAO candidateDAO = new CandidateDAO()
+    ConnectionPostgresDB connectionDB = new ConnectionPostgresDB()
+    CandidateDAO candidateDAO = new CandidateDAO(connectionDB)
     CandidateController candidatesController = new CandidateController(candidateDAO)
+
+    SkillView skillView = new SkillView()
+
     Scanner sc = new Scanner(System.in)
 
     void showCandidates() {
@@ -42,39 +47,9 @@ class CandidateView {
         if (id == 0) {
             println "Falha ao inserir candidato!"
         } else {
-            addSkillCandidate(id)
+            skillView.createSkillsCandidate(id)
             println "Candidado com id - ${id} inserido com sucesso!"
         }
-    }
-
-    private void addSkillCandidate(int id) {
-        List<String> skills = new ArrayList<>()
-
-        String text = "Digite a opção desejada: \n" +
-                "1 para inserir mais uma habilidade \n" +
-                "0 para parar a inserção \n"
-
-        int op = 1;
-
-        while (op != 0) {
-            Scanner sc = new Scanner(System.in)
-
-            switch (op){
-                case 1:
-                    System.out.println "Digite a sua habilidade"
-                    String skill = sc.nextLine()
-
-                    skills.add(skill)
-                    break
-                default:
-                    println "Digite uma opção válida"
-                    break
-            }
-            println text
-            op = sc.nextInt()
-        }
-
-        candidatesController.addSkillCandidate(skills, id)
     }
 
     void updateCandidate() {

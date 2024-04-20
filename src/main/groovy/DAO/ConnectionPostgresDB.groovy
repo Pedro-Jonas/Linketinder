@@ -1,9 +1,13 @@
 package DAO
 
+import Interfaces.IConnectionDB
+
 import java.sql.*
 
-class ConnectionDB {
-    static Connection connection() {
+class ConnectionPostgresDB implements IConnectionDB {
+
+    @Override
+    Connection connection() {
         Connection connection
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/LinkeTinder",

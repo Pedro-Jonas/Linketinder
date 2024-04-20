@@ -2,11 +2,15 @@ package Views
 
 import Controllers.CompanyController
 import DAO.CompanyDAO
+import DAO.ConnectionPostgresDB
 import Models.Company
 
 class CompanyView {
-    CompanyDAO companyDAO = new CompanyDAO()
+
+    ConnectionPostgresDB connectionPostgresDB = new ConnectionPostgresDB()
+    CompanyDAO companyDAO = new CompanyDAO(connectionPostgresDB)
     CompanyController companiesController = new CompanyController(companyDAO)
+
     Scanner sc = new Scanner(System.in)
 
     void showCompanies() {

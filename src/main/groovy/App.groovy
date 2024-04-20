@@ -1,6 +1,8 @@
+import Views.MenuView
+
 class App {
     static void main(String[] args) {
-        Menu menu = new Menu()
+        MenuView menu = new MenuView()
         menu.Start()
     }
 }

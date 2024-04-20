@@ -1,16 +1,10 @@
-import Controllers.JobVacancyController
-import DAO.JobVacancyDAO
-import Views.CandidateView
-import Views.CompanyView
-import Views.JobVacancyView
+package Views
 
-class Menu {
+class MenuView {
+
     CandidateView candidateView = new CandidateView()
     CompanyView companyView = new CompanyView()
-
     JobVacancyView jobVacancyView = new JobVacancyView()
-    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO()
-    JobVacancyController jobVacanciesActions = new  JobVacancyController(jobVacancyDAO)
 
     Scanner sc = new Scanner(System.in)
 

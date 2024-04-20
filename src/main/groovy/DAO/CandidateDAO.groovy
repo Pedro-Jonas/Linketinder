@@ -1,43 +1,18 @@
 package DAO
 
 import Interfaces.ICandidateDAO
+import Interfaces.IConnectionDB
 import Models.Candidate
 
 import java.sql.*
 import java.text.SimpleDateFormat
 
 class CandidateDAO implements ICandidateDAO {
-    ConnectionDB connectionDB =  new ConnectionDB()
-    SkillDAO skillDAO = new SkillDAO()
 
-    @Override
-    List<Candidate> selectCandidates() {
-        Connection connection = null
-        PreparedStatement stm = null
-        List<Candidate> candidates = new ArrayList<>()
+    IConnectionDB connectionDB
 
-        String selectCandidatesWithSkills = "SELECT cd.*, ARRAY_AGG(sk.name) skills FROM candidates AS cd INNER JOIN " +
-                "candidate_skill AS ck " +
-                "ON cd.id = ck.candidate_id INNER JOIN " +
-                "skill AS sk " +
-                "ON ck.skill_id = sk.id " +
-                "GROUP BY cd.id;"
-
-        try{
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(selectCandidatesWithSkills)
-
-            ResultSet result = stm.executeQuery()
-
-            candidates = this.listCandidates(result)
-        } catch (SQLException e) {
-            e.printStackTrace()
-        } finally {
-            connection.close()
-            stm.close()
-        }
-
-        return  candidates
+    CandidateDAO(IConnectionDB connectionDB) {
+        this.connectionDB = connectionDB
     }
 
     @Override
@@ -83,26 +58,25 @@ class CandidateDAO implements ICandidateDAO {
     }
 
     @Override
-    int insertSkillCandidate(int id, String skill) {
+    List<Candidate> selectCandidates() {
         Connection connection = null
         PreparedStatement stm = null
+        List<Candidate> candidates = new ArrayList<>()
 
-        int  skillId = skillDAO.selectSkillForName(skill)
+        String selectCandidatesWithSkills = "SELECT cd.*, ARRAY_AGG(sk.name) skills FROM candidates AS cd INNER JOIN " +
+                "candidate_skill AS ck " +
+                "ON cd.id = ck.candidate_id INNER JOIN " +
+                "skill AS sk " +
+                "ON ck.skill_id = sk.id " +
+                "GROUP BY cd.id;"
 
-        if(skillId == 0) {
-            skillId = skillDAO.insertSkill(skill)
-        }
-
-        String insertSkillCandidate = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
-
-        try {
+        try{
             connection = connectionDB.connection()
-            stm = connection.prepareStatement(insertSkillCandidate)
+            stm = connection.prepareStatement(selectCandidatesWithSkills)
 
-            stm.setInt(1, id)
-            stm.setInt(2, skillId)
+            ResultSet result = stm.executeQuery()
 
-            stm.executeUpdate()
+            candidates = this.listCandidates(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -110,7 +84,7 @@ class CandidateDAO implements ICandidateDAO {
             stm.close()
         }
 
-        return skillId
+        return  candidates
     }
 
     @Override
@@ -126,7 +100,7 @@ class CandidateDAO implements ICandidateDAO {
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
         try {
-            connection = ConnectionDB.connection()
+            connection = ConnectionPostgresDB.connection()
             stm = connection.prepareStatement(query)
 
             stm.setString(1, candidate.firstName)

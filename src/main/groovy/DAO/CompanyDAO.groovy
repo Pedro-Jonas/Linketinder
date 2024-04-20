@@ -1,36 +1,17 @@
 package DAO
 
 import Interfaces.ICompanyDAO
+import Interfaces.IConnectionDB
 import Models.Company
 
 import java.sql.*
 
 class CompanyDAO implements ICompanyDAO {
-    ConnectionDB connectionDAO =  new ConnectionDB()
 
-    @Override
-    List<Company> selectCompanies() {
-        Connection connection = null
-        PreparedStatement stm = null
-        List<Company> companies = new ArrayList<>()
+    IConnectionDB connectionDB
 
-        String selectCompanies = "SELECT * FROM companies;"
-
-        try{
-            connection = connectionDAO.connection()
-            stm = connection.prepareStatement(selectCompanies)
-
-            ResultSet result = stm.executeQuery()
-
-            companies = this.listCompanies(result)
-        } catch (SQLException e) {
-            e.printStackTrace()
-        } finally {
-            connection.close()
-            stm.close()
-        }
-
-        return companies
+    CompanyDAO(IConnectionDB connectionDB) {
+        this.connectionDB = connectionDB
     }
 
     @Override
@@ -44,7 +25,7 @@ class CompanyDAO implements ICompanyDAO {
                 "VALUES (?,?,?,?,?,?,?);"
 
         try {
-            connection = ConnectionDB.connection()
+            connection = connectionDB.connection()
             stm = connection.prepareStatement(insertCompany, Statement.RETURN_GENERATED_KEYS)
 
             stm.setString(1, company.name)
@@ -72,6 +53,31 @@ class CompanyDAO implements ICompanyDAO {
     }
 
     @Override
+    List<Company> selectCompanies() {
+        Connection connection = null
+        PreparedStatement stm = null
+        List<Company> companies = new ArrayList<>()
+
+        String selectCompanies = "SELECT * FROM companies;"
+
+        try{
+            connection = connectionDB.connection()
+            stm = connection.prepareStatement(selectCompanies)
+
+            ResultSet result = stm.executeQuery()
+
+            companies = this.listCompanies(result)
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            connection.close()
+            stm.close()
+        }
+
+        return companies
+    }
+
+    @Override
     boolean updateCompany(Company company, int id){
         Connection connection = null
         PreparedStatement stm = null
@@ -82,7 +88,7 @@ class CompanyDAO implements ICompanyDAO {
                 "WHERE id = ?;"
 
         try {
-            connection = ConnectionDB.connection()
+            connection = connectionDB.connection()
             stm = connection.prepareStatement(updateCompany)
 
             stm.setString(1, company.name)
@@ -118,7 +124,7 @@ class CompanyDAO implements ICompanyDAO {
         String deleteCompany = "DELETE FROM companies WHERE id = ?;"
 
         try {
-            connection = ConnectionDB.connection()
+            connection = ConnectionPostgresDB.connection()
             stm = connection.prepareStatement(deleteCompany)
 
             stm.setInt(1, id)
