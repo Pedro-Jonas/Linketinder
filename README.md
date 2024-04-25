@@ -22,5 +22,8 @@ gradle run
 2. Criação de Interfaces
 3. Separação de Responsabilidades
 4. Aplicação de princípios SOLID
-
+5. Adoção do padrão Factory
+- Para facilitar a integração de bancos de dados diferentes sem quebrar a apliação
+6. Adoção do padrão Singleton
+- Garantindo que existe apenas uma conexão com o banco de dados e que seja instaciada a partir da mesma
 <!-- Pedro Jonas Nunes de Araújo -->

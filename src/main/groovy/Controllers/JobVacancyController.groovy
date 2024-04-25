@@ -4,7 +4,6 @@ import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
 
 class JobVacancyController {
-
     IJobVacancyDAO jobVacancyDAO
 
     JobVacancyController(IJobVacancyDAO jobVacancyDAO) {

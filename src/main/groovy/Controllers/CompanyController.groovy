@@ -4,7 +4,6 @@ import Interfaces.ICompanyDAO
 import Models.Company
 
 class CompanyController {
-
     ICompanyDAO companyDAO
 
     CompanyController(ICompanyDAO companyDAO) {

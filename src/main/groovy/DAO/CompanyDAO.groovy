@@ -1,32 +1,30 @@
 package DAO
 
 import Interfaces.ICompanyDAO
-import Interfaces.IConnectionDB
 import Models.Company
+import factories.IConnectionFactory
 
 import java.sql.*
 
 class CompanyDAO implements ICompanyDAO {
+    IConnectionFactory connectionDB
 
-    IConnectionDB connectionDB
-
-    CompanyDAO(IConnectionDB connectionDB) {
+    CompanyDAO(IConnectionFactory connectionDB) {
         this.connectionDB = connectionDB
     }
 
     @Override
     int insertCompany(Company company) {
-        Connection connection = null
         PreparedStatement stm = null
         int id = 0
 
-        String insertCompany = "INSERT INTO companies (name, cnpj, email," +
+        String insertNewCompany = "INSERT INTO companies (name, cnpj, email," +
                 " description, country, cep, password)  " +
                 "VALUES (?,?,?,?,?,?,?);"
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(insertCompany, Statement.RETURN_GENERATED_KEYS)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(insertNewCompany, Statement.RETURN_GENERATED_KEYS)
 
             stm.setString(1, company.name)
             stm.setString(2, company.cnpj)
@@ -45,7 +43,6 @@ class CompanyDAO implements ICompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -54,14 +51,13 @@ class CompanyDAO implements ICompanyDAO {
 
     @Override
     List<Company> selectCompanies() {
-        Connection connection = null
         PreparedStatement stm = null
         List<Company> companies = new ArrayList<>()
 
         String selectCompanies = "SELECT * FROM companies;"
 
         try{
-            connection = connectionDB.connection()
+            Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(selectCompanies)
 
             ResultSet result = stm.executeQuery()
@@ -70,7 +66,6 @@ class CompanyDAO implements ICompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -79,17 +74,16 @@ class CompanyDAO implements ICompanyDAO {
 
     @Override
     boolean updateCompany(Company company, int id){
-        Connection connection = null
         PreparedStatement stm = null
         boolean updateLines = false
 
-        String updateCompany = "UPDATE companies SET name = ?, cnpj = ?, " +
+        String updateCompanyById = "UPDATE companies SET name = ?, cnpj = ?, " +
                 "email = ?, description = ?, country = ?, cep = ?, password = ? " +
                 "WHERE id = ?;"
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(updateCompany)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(updateCompanyById)
 
             stm.setString(1, company.name)
             stm.setString(2, company.cnpj)
@@ -108,7 +102,6 @@ class CompanyDAO implements ICompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -117,15 +110,14 @@ class CompanyDAO implements ICompanyDAO {
 
     @Override
     boolean deleteCompany(int id){
-        Connection connection = null
         PreparedStatement stm = null
         boolean hasDelete = false
 
-        String deleteCompany = "DELETE FROM companies WHERE id = ?;"
+        String deleteCompanyById = "DELETE FROM companies WHERE id = ?;"
 
         try {
-            connection = ConnectionPostgresDB.connection()
-            stm = connection.prepareStatement(deleteCompany)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(deleteCompanyById)
 
             stm.setInt(1, id)
 
@@ -137,7 +129,6 @@ class CompanyDAO implements ICompanyDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 

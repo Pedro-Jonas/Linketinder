@@ -1,12 +1,13 @@
 package Views
 
 import Controllers.SkillController
-import DAO.ConnectionPostgresDB
+
 import DAO.SkillDAO
+import factories.IConnectionFactory
+import factories.PostgresConnectionFactory
 
 class SkillView {
-
-    ConnectionPostgresDB connectionDB = new ConnectionPostgresDB()
+    IConnectionFactory connectionDB = PostgresConnectionFactory.getInstance()
     SkillDAO skillDAO = new SkillDAO(connectionDB)
     SkillController skillController = new SkillController(skillDAO)
 

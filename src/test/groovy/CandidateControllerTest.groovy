@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
 class CandidateControllerTest {
-
     ICandidateDAO candidateDAO = mock(ICandidateDAO.class)
     CandidateController candidatesController = new CandidateController(candidateDAO)
 

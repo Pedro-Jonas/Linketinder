@@ -1,35 +1,34 @@
 package DAO
 
 import Interfaces.ICandidateDAO
-import Interfaces.IConnectionDB
+
 import Models.Candidate
+import factories.IConnectionFactory
 
 import java.sql.*
 import java.text.SimpleDateFormat
 
 class CandidateDAO implements ICandidateDAO {
+    IConnectionFactory connectionDB
 
-    IConnectionDB connectionDB
-
-    CandidateDAO(IConnectionDB connectionDB) {
+    CandidateDAO(IConnectionFactory connectionDB) {
         this.connectionDB = connectionDB
     }
 
     @Override
     int insertCandidate(Candidate candidate) {
-        Connection connection = null
         PreparedStatement stm = null
         int id = 0
 
-        String insertCandidate = "INSERT INTO candidates (first_name, last_name, date_of_Birth," +
+        String insertNewCandidate = "INSERT INTO candidates (first_name, last_name, date_of_Birth," +
                 " email, cpf, country, cep, description, password)  " +
                 "VALUES (?,?,?,?,?,?,?,?,?);"
 
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(insertCandidate, Statement.RETURN_GENERATED_KEYS)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(insertNewCandidate, Statement.RETURN_GENERATED_KEYS)
 
             stm.setString(1, candidate.firstName)
             stm.setString(2, candidate.lastName)
@@ -50,7 +49,6 @@ class CandidateDAO implements ICandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -59,7 +57,6 @@ class CandidateDAO implements ICandidateDAO {
 
     @Override
     List<Candidate> selectCandidates() {
-        Connection connection = null
         PreparedStatement stm = null
         List<Candidate> candidates = new ArrayList<>()
 
@@ -71,7 +68,7 @@ class CandidateDAO implements ICandidateDAO {
                 "GROUP BY cd.id;"
 
         try{
-            connection = connectionDB.connection()
+            Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(selectCandidatesWithSkills)
 
             ResultSet result = stm.executeQuery()
@@ -80,7 +77,6 @@ class CandidateDAO implements ICandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -89,19 +85,18 @@ class CandidateDAO implements ICandidateDAO {
 
     @Override
     boolean updateCandidate(Candidate candidate, int id) {
-        Connection connection = null
         PreparedStatement stm = null
         boolean updateLines = false
 
-        String query = "UPDATE candidates SET first_name = ?, last_name = ?, date_of_Birth = ?, " +
+        String updateCandidateById = "UPDATE candidates SET first_name = ?, last_name = ?, date_of_Birth = ?, " +
                 "email = ?, cpf = ?, country = ?, cep = ?, description = ?, password = ? " +
                 "WHERE id = ?;"
 
         Date dateOf_birth = new Date(candidate.dateOfBirth.getTime())
 
         try {
-            connection = ConnectionPostgresDB.connection()
-            stm = connection.prepareStatement(query)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(updateCandidateById)
 
             stm.setString(1, candidate.firstName)
             stm.setString(2, candidate.lastName)
@@ -112,7 +107,7 @@ class CandidateDAO implements ICandidateDAO {
             stm.setString(7, candidate.cep)
             stm.setString(8, candidate.description)
             stm.setString(9, candidate.password)
-            stm.setInt(9, id)
+            stm.setInt(10, id)
 
             int result = stm.executeUpdate()
 
@@ -122,7 +117,6 @@ class CandidateDAO implements ICandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -131,15 +125,14 @@ class CandidateDAO implements ICandidateDAO {
 
     @Override
     boolean deleteCandidate(int id) {
-        Connection connection = null
         PreparedStatement stm = null
         boolean hasDelete = false
 
-        String deleteCandidate = "DELETE FROM candidates WHERE id= ?;"
+        String deleteCandidateById = "DELETE FROM candidates WHERE id= ?;"
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(deleteCandidate)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(deleteCandidateById)
 
             stm.setInt(1, id)
 
@@ -151,7 +144,6 @@ class CandidateDAO implements ICandidateDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 

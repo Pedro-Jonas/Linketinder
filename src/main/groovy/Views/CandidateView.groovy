@@ -2,14 +2,15 @@ package Views
 
 import Controllers.CandidateController
 import DAO.CandidateDAO
-import DAO.ConnectionPostgresDB
+
 import Models.Candidate
+import factories.IConnectionFactory
+import factories.PostgresConnectionFactory
 
 import java.text.SimpleDateFormat
 
 class CandidateView {
-
-    ConnectionPostgresDB connectionDB = new ConnectionPostgresDB()
+    IConnectionFactory connectionDB = PostgresConnectionFactory.getInstance()
     CandidateDAO candidateDAO = new CandidateDAO(connectionDB)
     CandidateController candidatesController = new CandidateController(candidateDAO)
 

@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
 class CompanyControllerTest {
-
     ICompanyDAO companyDAO = mock(ICompanyDAO.class)
     CompanyController companyController = new CompanyController(companyDAO)
 

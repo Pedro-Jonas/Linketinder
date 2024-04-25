@@ -1,14 +1,15 @@
 package Views
 
 import Controllers.JobVacancyController
-import DAO.ConnectionPostgresDB
+
 import DAO.JobVacancyDAO
 import Models.JobVacancy
+import factories.IConnectionFactory
+import factories.PostgresConnectionFactory
 
 class JobVacancyView {
-
-    ConnectionPostgresDB connectionDB = new ConnectionPostgresDB()
-    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO(connectionDB)
+    IConnectionFactory connectionFactory = PostgresConnectionFactory.getInstance()
+    JobVacancyDAO jobVacancyDAO = new JobVacancyDAO(connectionFactory)
     JobVacancyController jobVacanciesController = new JobVacancyController(jobVacancyDAO)
 
     SkillView skillView = new SkillView()

@@ -2,13 +2,14 @@ package Views
 
 import Controllers.CompanyController
 import DAO.CompanyDAO
-import DAO.ConnectionPostgresDB
+
 import Models.Company
+import factories.IConnectionFactory
+import factories.PostgresConnectionFactory
 
 class CompanyView {
-
-    ConnectionPostgresDB connectionPostgresDB = new ConnectionPostgresDB()
-    CompanyDAO companyDAO = new CompanyDAO(connectionPostgresDB)
+    IConnectionFactory connectionFactory = PostgresConnectionFactory.getInstance()
+    CompanyDAO companyDAO = new CompanyDAO(connectionFactory)
     CompanyController companiesController = new CompanyController(companyDAO)
 
     Scanner sc = new Scanner(System.in)

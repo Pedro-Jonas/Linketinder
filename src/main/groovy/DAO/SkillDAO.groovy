@@ -1,28 +1,27 @@
 package DAO
 
-import Interfaces.IConnectionDB
+
 import Interfaces.ISkillDAO
+import factories.IConnectionFactory
 
 import java.sql.*
 
 class SkillDAO implements ISkillDAO {
+    IConnectionFactory connectionDB
 
-    IConnectionDB connectionDB
-
-    SkillDAO(IConnectionDB connectionDB){
+    SkillDAO(IConnectionFactory connectionDB){
         this.connectionDB = connectionDB
     }
 
     @Override
     int insertSkill(String skill) {
-        Connection connection = null
         PreparedStatement stm = null
         int skillId = 0
 
         String insertSkill = "INSERT INTO skill (name) VALUES(?);"
 
         try {
-            connection = connectionDB.connection()
+            Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(insertSkill, Statement.RETURN_GENERATED_KEYS)
 
             stm.setString(1, skill)
@@ -36,7 +35,6 @@ class SkillDAO implements ISkillDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -44,16 +42,15 @@ class SkillDAO implements ISkillDAO {
     }
 
     @Override
-    int selectSkillForName(String skill) {
-        Connection connection = null
+    int selectSkillByName(String skill) {
         PreparedStatement stm = null
         int skillId = 0
 
-        String selectSkillForName = "SELECT * FROM skill sk WHERE sk.name = ?";
+        String selectSkillByName = "SELECT * FROM skill sk WHERE sk.name = ?";
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(selectSkillForName)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(selectSkillByName)
 
             stm.setString(1, skill)
 
@@ -65,7 +62,6 @@ class SkillDAO implements ISkillDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
         return skillId
@@ -73,10 +69,9 @@ class SkillDAO implements ISkillDAO {
 
     @Override
     int insertSkillCandidate(int id, String skill) {
-        Connection connection = null
         PreparedStatement stm = null
 
-        int  skillId = this.selectSkillForName(skill)
+        int  skillId = this.selectSkillByName(skill)
 
         if(skillId == 0) {
             skillId = this.insertSkill(skill)
@@ -85,7 +80,7 @@ class SkillDAO implements ISkillDAO {
         String insertSkillCandidate = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
 
         try {
-            connection = connectionDB.connection()
+            Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(insertSkillCandidate)
 
             stm.setInt(1, id)
@@ -95,7 +90,6 @@ class SkillDAO implements ISkillDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -104,10 +98,9 @@ class SkillDAO implements ISkillDAO {
 
     @Override
     int insertSkillJobVacancy(int id, String skill) {
-        Connection connection = null
         PreparedStatement stm = null
 
-        int skillId = this.selectSkillForName(skill)
+        int skillId = this.selectSkillByName(skill)
 
         if (skillId == 0){
             skillId = this.insertSkill(skill)
@@ -116,7 +109,7 @@ class SkillDAO implements ISkillDAO {
         String insertSkillJobVacancy = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
 
         try {
-            connection = connectionDB.connection()
+            Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(insertSkillJobVacancy)
 
             stm.setInt(1, id)
@@ -126,7 +119,6 @@ class SkillDAO implements ISkillDAO {
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 

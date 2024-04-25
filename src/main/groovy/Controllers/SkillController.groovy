@@ -3,7 +3,6 @@ package Controllers
 import Interfaces.ISkillDAO
 
 class SkillController {
-
     ISkillDAO skillDAO
 
     SkillController(ISkillDAO skillDAO){

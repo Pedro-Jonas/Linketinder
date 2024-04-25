@@ -1,31 +1,30 @@
 package DAO
 
-import Interfaces.IConnectionDB
+
 import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
+import factories.IConnectionFactory
 
 import java.sql.*
 
 class JobVacancyDAO implements IJobVacancyDAO{
+    IConnectionFactory connectionDB
 
-    IConnectionDB connectionDB
-
-    JobVacancyDAO(IConnectionDB connectionDB) {
+    JobVacancyDAO(IConnectionFactory connectionDB) {
         this.connectionDB = connectionDB
     }
 
     @Override
     int insertJobVacancy(JobVacancy jobVacancy) {
-        Connection connection = null
         PreparedStatement stm = null
         int id = 0
 
-        String insertJobVacancy = "INSERT INTO job_vacancies (name, state, city, description, company_id)  " +
+        String insertNewJobVacancy = "INSERT INTO job_vacancies (name, state, city, description, company_id)  " +
                 "VALUES (?,?,?,?,?);"
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(insertJobVacancy, Statement.RETURN_GENERATED_KEYS)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(insertNewJobVacancy, Statement.RETURN_GENERATED_KEYS)
 
             stm.setString(1, jobVacancy.name)
             stm.setString(2, jobVacancy.state)
@@ -51,7 +50,6 @@ class JobVacancyDAO implements IJobVacancyDAO{
 
     @Override
     List<JobVacancy> selectJobVacancies() {
-        Connection connection = null
         PreparedStatement stm = null
         List<JobVacancy> vacancies = new ArrayList<>()
 
@@ -63,7 +61,7 @@ class JobVacancyDAO implements IJobVacancyDAO{
                 "GROUP BY jv.id;"
 
         try{
-            connection = connectionDB.connection()
+            Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(selectJobVacanciesWithSkills)
 
             ResultSet result = stm.executeQuery()
@@ -72,7 +70,6 @@ class JobVacancyDAO implements IJobVacancyDAO{
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -81,17 +78,16 @@ class JobVacancyDAO implements IJobVacancyDAO{
 
     @Override
     boolean updateJobVacancy(JobVacancy jobVacancy, int id) {
-        Connection connection = null
         PreparedStatement stm = null
         boolean updateLines = false
 
-        String updateJobVacancy = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +
+        String updateJobVacancyById = "UPDATE job_vacancies SET name = ?, state = ?, city = ?, " +
                 "description = ?, company_id = ? " +
                 "WHERE id = ?;"
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(updateJobVacancy)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(updateJobVacancyById)
 
             stm.setString(1, jobVacancy.name)
             stm.setString(2, jobVacancy.state)
@@ -108,7 +104,6 @@ class JobVacancyDAO implements IJobVacancyDAO{
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -117,15 +112,14 @@ class JobVacancyDAO implements IJobVacancyDAO{
 
     @Override
     boolean deleteJobVacancy(int id) {
-        Connection connection = null
         PreparedStatement stm = null
         boolean hasDelete = false
 
-        String deleteJobVacancy = "DELETE FROM job_vacancies WHERE id = ?;"
+        String deleteJobVacancyById = "DELETE FROM job_vacancies WHERE id = ?;"
 
         try {
-            connection = connectionDB.connection()
-            stm = connection.prepareStatement(deleteJobVacancy)
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(deleteJobVacancyById)
 
             stm.setInt(1, id)
 
@@ -137,7 +131,6 @@ class JobVacancyDAO implements IJobVacancyDAO{
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 

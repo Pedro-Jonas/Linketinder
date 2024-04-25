@@ -4,7 +4,6 @@ import Interfaces.ICandidateDAO
 import Models.Candidate
 
 class CandidateController {
-
     ICandidateDAO candidateDAO
 
     CandidateController(ICandidateDAO candidateDAO) {

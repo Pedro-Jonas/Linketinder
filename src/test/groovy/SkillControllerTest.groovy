@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
 class SkillControllerTest {
-
     ISkillDAO skillDAO = mock(ISkillDAO.class)
     SkillController skillController = new SkillController(skillDAO)
 
@@ -44,5 +43,4 @@ class SkillControllerTest {
         //then
         assertEquals(ids, result)
     }
-
 }
