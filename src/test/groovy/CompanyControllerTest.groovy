@@ -14,15 +14,8 @@ class CompanyControllerTest {
     void getCompaniesTest() {
         //given
         List<Company> companies = new ArrayList<>()
-        Company company = new Company()
 
-        company.setName("Empresa1")
-        company.setEmail("empresa1@gmail.com")
-        company.setCnpj("11.111.111/1111-11")
-        company.setCountry("país1")
-        company.setCep("11111-111")
-        company.setDescription("Descrição1")
-        company.setPassword("senha1")
+        Company company = new Company()
 
         companies.add(company)
 

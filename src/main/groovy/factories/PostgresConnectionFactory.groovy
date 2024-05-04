@@ -2,12 +2,13 @@ package factories
 
 import java.sql.*
 
-class PostgresConnectionFactory implements IConnectionFactory{
+class PostgresConnectionFactory implements IConnectionFactory {
     private static PostgresConnectionFactory instance;
     private Connection connection;
 
     private PostgresConnectionFactory() {
         try {
+            Class.forName("org.postgresql.Driver")
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/LinkeTinder",
                     "postgres","jonas1234" )
 

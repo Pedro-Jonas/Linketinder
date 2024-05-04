@@ -2,8 +2,6 @@ import Controllers.CandidateController
 import Interfaces.ICandidateDAO
 import Models.Candidate
 
-import java.text.SimpleDateFormat
-
 import org.junit.jupiter.api.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
@@ -12,34 +10,42 @@ class CandidateControllerTest {
     ICandidateDAO candidateDAO = mock(ICandidateDAO.class)
     CandidateController candidatesController = new CandidateController(candidateDAO)
 
+
     @Test
-    void getCandidatesTest() {
+    void getAllCandidates() {
         //given
         List<Candidate> candidates = new ArrayList<>()
 
         Candidate candidate = new Candidate()
 
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy")
-
-        candidate.setFirstName("Candidato1")
-        candidate.setLastName("Candidato1")
-        candidate.setDateOfBirth(format.parse("12/12/1999"))
-        candidate.setEmail("candidato1@gmail.com")
-        candidate.setCpf("111.111.111-11")
-        candidate.setCountry("País1")
-        candidate.setCep("11111-111")
-        candidate.setDescription("Descrição")
-        candidate.setPassword("senha1111")
-
         candidates.add(candidate)
 
-        when(candidateDAO.selectCandidates()).thenReturn(candidates)
+        when(candidateDAO.selectAllCandidates()).thenReturn(candidates)
         //when
-        List<Candidate> result = candidatesController.getCandidates()
+        List<Candidate> result = candidatesController.getAllCandidates()
 
         //then
         assertEquals(candidates, result)
     }
+
+    @Test
+    void getCandidatesWithSkillsTest() {
+        //given
+        List<Candidate> candidates = new ArrayList<>()
+
+        Candidate candidate = new Candidate()
+
+        candidates.add(candidate)
+
+        when(candidateDAO.selectCandidatesWithSkills()).thenReturn(candidates)
+        //when
+        List<Candidate> result = candidatesController.getCandidatesWithSkills()
+
+        //then
+        assertEquals(candidates, result)
+    }
+
+
 
     @Test
     void addCandidateTest() {

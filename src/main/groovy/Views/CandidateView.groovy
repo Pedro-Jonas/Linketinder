@@ -22,7 +22,7 @@ class CandidateView {
         List<Candidate> candidates = new ArrayList<>()
 
         try {
-            candidates = candidatesController.getCandidates()
+            candidates = candidatesController.getCandidatesWithSkills()
         } catch (Exception e) {
             e.printStackTrace()
         }

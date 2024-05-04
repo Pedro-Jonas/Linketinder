@@ -83,12 +83,12 @@ ALTER TABLE "job_vacancies_skill" ADD CONSTRAINT "job_vacancies_skill_fk2" FOREI
 INSERT INTO candidates (first_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Pedro Jonas', 'Nunes de Araújo', '19/07/2000', 'jonas@gmail.com', '111.111.111-11',
-        '	Brasil', '11111-111', 'Essa é a descrição', 'jonas1111');
+        'Brasil', '11111-111', 'Essa é a descrição', 'jonas1111');
 
 INSERT INTO candidates (first_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)
 VALUES ('Maria Eduarda', 'Pereira', '20/08/2001','eduarda@gmail.com', '222.222.222-22',
-        '	Brasil', '22222-222', 'Essa é a descrição', 'duda2222');
+        'Brasil', '22222-222', 'Essa é a descrição', 'duda2222');
 
 INSERT INTO candidates (first_name, last_name, date_of_birth, email,
                         cpf, country, cep, description, password)

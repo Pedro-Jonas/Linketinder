@@ -22,11 +22,23 @@ class CandidateController {
         return id
     }
 
-    List<Candidate> getCandidates() {
+    List<Candidate> getCandidatesWithSkills() {
         List<Candidate> candidates = new ArrayList<>()
 
         try{
-            candidates = candidateDAO.selectCandidates()
+            candidates = candidateDAO.selectCandidatesWithSkills()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return candidates
+    }
+
+    List<Candidate> getAllCandidates() {
+        List<Candidate> candidates = new ArrayList<>()
+
+        try{
+            candidates = candidateDAO.selectAllCandidates()
         } catch (Exception e) {
             e.printStackTrace()
         }

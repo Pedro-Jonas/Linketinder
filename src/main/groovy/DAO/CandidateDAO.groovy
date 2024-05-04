@@ -56,7 +56,30 @@ class CandidateDAO implements ICandidateDAO {
     }
 
     @Override
-    List<Candidate> selectCandidates() {
+    List<Candidate> selectAllCandidates() {
+        PreparedStatement stm = null
+        List<Candidate> candidates = new ArrayList<>()
+
+        String selectAllCandidates = "SELECT * FROM candidates"
+
+        try {
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(selectAllCandidates)
+
+            ResultSet result = stm.executeQuery()
+
+            candidates = this.listCandidates(result)
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            stm.close()
+        }
+
+        return  candidates
+    }
+
+    @Override
+    List<Candidate> selectCandidatesWithSkills() {
         PreparedStatement stm = null
         List<Candidate> candidates = new ArrayList<>()
 
@@ -67,13 +90,13 @@ class CandidateDAO implements ICandidateDAO {
                 "ON ck.skill_id = sk.id " +
                 "GROUP BY cd.id;"
 
-        try{
+        try {
             Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(selectCandidatesWithSkills)
 
             ResultSet result = stm.executeQuery()
 
-            candidates = this.listCandidates(result)
+            candidates = this.listCandidatesWithSkills(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -150,9 +173,35 @@ class CandidateDAO implements ICandidateDAO {
         return hasDelete
     }
 
-
     @Override
     List<Candidate> listCandidates(ResultSet result) {
+        List<Candidate> candidates = new ArrayList<>()
+
+        while (result.next()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
+            Date dateOfBirth = new Date(sdf.parse(result.getString("date_of_birth")).time)
+
+            Candidate candidate = new Candidate()
+
+            candidate.setId(result.getInt("id"))
+            candidate.setFirstName(result.getString("first_name"))
+            candidate.setLastName(result.getString("last_name"))
+            candidate.setDateOfBirth(dateOfBirth)
+            candidate.setEmail(result.getString("email"))
+            candidate.setCpf(result.getString("cpf"))
+            candidate.setCountry(result.getString("country"))
+            candidate.setCep(result.getString("cep"))
+            candidate.setDescription(result.getString("description"))
+            candidate.setPassword(result.getString("password"))
+
+            candidates.add(candidate)
+        }
+
+        return candidates
+    }
+
+    @Override
+    List<Candidate> listCandidatesWithSkills(ResultSet result) {
         List<Candidate> candidates = new ArrayList<>()
 
         while (result.next()) {

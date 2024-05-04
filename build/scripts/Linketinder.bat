@@ -68,7 +68,7 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\Linketinder-1.0-SNAPSHOT.jar;%APP_HOME%\lib\groovy-4.0.14.jar;%APP_HOME%\lib\postgresql-42.7.0.jar;%APP_HOME%\lib\checker-qual-3.31.0.jar
+set CLASSPATH=%APP_HOME%\lib\Linketinder-1.0-SNAPSHOT.jar;%APP_HOME%\lib\groovy-4.0.14.jar;%APP_HOME%\lib\postgresql-42.7.3.jar;%APP_HOME%\lib\gson-2.10.1.jar;%APP_HOME%\lib\checker-qual-3.42.0.jar
 
 
 @rem Execute Linketinder
