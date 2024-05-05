@@ -1,4 +1,4 @@
-import Controllers.JobVacancyController
+import Services.JobVacancyService
 import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
 
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
-class JobVacancyControllerTest {
+class JobVacancyServiceTest {
     IJobVacancyDAO jobVacancyDAO = mock(IJobVacancyDAO.class)
-    JobVacancyController jobVacancyController = new JobVacancyController(jobVacancyDAO)
+    JobVacancyService jobVacancyService = new JobVacancyService(jobVacancyDAO)
 
     @Test
     void getCompaniesTest() {
@@ -26,7 +26,7 @@ class JobVacancyControllerTest {
 
         when(jobVacancyDAO.selectJobVacancies()).thenReturn(jobVacancies)
         //when
-        List<JobVacancy> result = jobVacancyController.getJobVacancies()
+        List<JobVacancy> result = jobVacancyService.getJobVacancies()
 
         //then
         assertEquals(jobVacancies, result)
@@ -39,7 +39,7 @@ class JobVacancyControllerTest {
         when(jobVacancyDAO.insertJobVacancy(jobVacancy)).thenReturn(1)
 
         //when
-        int result = jobVacancyController.addJobVacancy(jobVacancy)
+        int result = jobVacancyService.addJobVacancy(jobVacancy)
 
         //then
         assertEquals(1, result)
@@ -52,7 +52,7 @@ class JobVacancyControllerTest {
         when(jobVacancyDAO.updateJobVacancy(jobVacancy, 1)).thenReturn(true)
 
         //when
-        boolean result = jobVacancyController.updateJobVacancy(jobVacancy, 1)
+        boolean result = jobVacancyService.updateJobVacancy(jobVacancy, 1)
 
         //then
         assertEquals(true, result)
@@ -65,7 +65,7 @@ class JobVacancyControllerTest {
         when(jobVacancyDAO.deleteJobVacancy(1)).thenReturn(true)
 
         //when
-        boolean result = jobVacancyController.deleteJobVacancy(1)
+        boolean result = jobVacancyService.deleteJobVacancy(1)
 
         //then
         assertEquals(true, result)

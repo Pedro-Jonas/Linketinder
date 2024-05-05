@@ -1,4 +1,4 @@
-import Controllers.CompanyController
+import Services.CompanyService
 import Interfaces.ICompanyDAO
 import Models.Company
 
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
-class CompanyControllerTest {
+class CompanyServiceTest {
     ICompanyDAO companyDAO = mock(ICompanyDAO.class)
-    CompanyController companyController = new CompanyController(companyDAO)
+    CompanyService companyService = new CompanyService(companyDAO)
 
     @Test
     void getCompaniesTest() {
@@ -21,7 +21,7 @@ class CompanyControllerTest {
 
         when(companyDAO.selectCompanies()).thenReturn(companies)
         //when
-        List<Company> result = companyController.getCompanies()
+        List<Company> result = companyService.getCompanies()
 
         //then
         assertEquals(companies, result)
@@ -34,7 +34,7 @@ class CompanyControllerTest {
         when(companyDAO.insertCompany(company)).thenReturn(1)
 
         //when
-        int result = companyController.addCompany(company)
+        int result = companyService.addCompany(company)
 
         //then
         assertEquals(1, result)
@@ -47,7 +47,7 @@ class CompanyControllerTest {
         when(companyDAO.updateCompany(company, 1)).thenReturn(true)
 
         //when
-        boolean result = companyController.updateCompany(company, 1)
+        boolean result = companyService.updateCompany(company, 1)
 
         //then
         assertEquals(true, result)
@@ -60,7 +60,7 @@ class CompanyControllerTest {
         when(companyDAO.deleteCompany(1)).thenReturn(true)
 
         //when
-        boolean result = companyController.deleteCompany(1)
+        boolean result = companyService.deleteCompany(1)
 
         //then
         assertEquals(true, result)

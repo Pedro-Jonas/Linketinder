@@ -1,12 +1,12 @@
-package Controllers
+package Services
 
 import Interfaces.IJobVacancyDAO
 import Models.JobVacancy
 
-class JobVacancyController {
+class JobVacancyService {
     IJobVacancyDAO jobVacancyDAO
 
-    JobVacancyController(IJobVacancyDAO jobVacancyDAO) {
+    JobVacancyService(IJobVacancyDAO jobVacancyDAO) {
         this.jobVacancyDAO = jobVacancyDAO
     }
 

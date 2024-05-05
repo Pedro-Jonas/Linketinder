@@ -1,4 +1,4 @@
-import Controllers.CandidateController
+import Services.CandidateService
 import Interfaces.ICandidateDAO
 import Models.Candidate
 
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.*
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.mockito.Mockito.*
 
-class CandidateControllerTest {
+class CandidateServiceTest {
     ICandidateDAO candidateDAO = mock(ICandidateDAO.class)
-    CandidateController candidatesController = new CandidateController(candidateDAO)
+    CandidateService candidatesService = new CandidateService(candidateDAO)
 
 
     @Test
@@ -22,7 +22,7 @@ class CandidateControllerTest {
 
         when(candidateDAO.selectAllCandidates()).thenReturn(candidates)
         //when
-        List<Candidate> result = candidatesController.getAllCandidates()
+        List<Candidate> result = candidatesService.getAllCandidates()
 
         //then
         assertEquals(candidates, result)
@@ -39,7 +39,7 @@ class CandidateControllerTest {
 
         when(candidateDAO.selectCandidatesWithSkills()).thenReturn(candidates)
         //when
-        List<Candidate> result = candidatesController.getCandidatesWithSkills()
+        List<Candidate> result = candidatesService.getCandidatesWithSkills()
 
         //then
         assertEquals(candidates, result)
@@ -54,7 +54,7 @@ class CandidateControllerTest {
         when(candidateDAO.insertCandidate(candidate)).thenReturn(1)
 
         //when
-        int result = candidatesController.addCandidate(candidate)
+        int result = candidatesService.addCandidate(candidate)
 
         //then
         assertEquals(1, result)
@@ -67,7 +67,7 @@ class CandidateControllerTest {
         when(candidateDAO.updateCandidate(candidate, 1)).thenReturn(true)
 
         //when
-        boolean result = candidatesController.updateCandidate(candidate, 1)
+        boolean result = candidatesService.updateCandidate(candidate, 1)
 
         //then
         assertEquals(true, result)
@@ -80,7 +80,7 @@ class CandidateControllerTest {
         when(candidateDAO.deleteCandidate(1)).thenReturn(true)
 
         //when
-        boolean result = candidatesController.deleteCandidate(1)
+        boolean result = candidatesService.deleteCandidate(1)
 
         //then
         assertEquals(true, result)

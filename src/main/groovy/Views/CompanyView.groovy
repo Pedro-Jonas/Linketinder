@@ -1,6 +1,6 @@
 package Views
 
-import Controllers.CompanyController
+import Services.CompanyService
 import DAO.CompanyDAO
 
 import Models.Company
@@ -10,7 +10,7 @@ import factories.PostgresConnectionFactory
 class CompanyView {
     IConnectionFactory connectionFactory = PostgresConnectionFactory.getInstance()
     CompanyDAO companyDAO = new CompanyDAO(connectionFactory)
-    CompanyController companiesController = new CompanyController(companyDAO)
+    CompanyService companiesService = new CompanyService(companyDAO)
 
     Scanner sc = new Scanner(System.in)
 
@@ -18,7 +18,7 @@ class CompanyView {
         List<Company> companies = new ArrayList<>()
 
         try {
-            companies = companiesController.getCompanies()
+            companies = companiesService.getCompanies()
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -36,7 +36,7 @@ class CompanyView {
         Company company = createNewCompany()
 
         try {
-            id = companiesController.addCompany(company)
+            id = companiesService.addCompany(company)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -57,7 +57,7 @@ class CompanyView {
         Company company = createNewCompany()
 
         try {
-            updateLines = companiesController.updateCompany(company, id)
+            updateLines = companiesService.updateCompany(company, id)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -76,7 +76,7 @@ class CompanyView {
         int id = sc.nextInt()
 
         try {
-            hasDelete = companiesController.deleteCompany(id)
+            hasDelete = companiesService.deleteCompany(id)
         } catch (Exception e) {
             e.printStackTrace()
         }

@@ -1,6 +1,6 @@
 package Views
 
-import Controllers.SkillController
+import Services.SkillService
 
 import DAO.SkillDAO
 import factories.IConnectionFactory
@@ -9,7 +9,7 @@ import factories.PostgresConnectionFactory
 class SkillView {
     IConnectionFactory connectionDB = PostgresConnectionFactory.getInstance()
     SkillDAO skillDAO = new SkillDAO(connectionDB)
-    SkillController skillController = new SkillController(skillDAO)
+    SkillService skillService = new SkillService(skillDAO)
 
     void createSkillsCandidate(int id) {
         List<String> skills = new ArrayList<>()
@@ -17,7 +17,7 @@ class SkillView {
 
         try {
             skills = ListSkillsJobVacancy()
-            ids = skillController.addSkillCandidate(skills, id)
+            ids = skillService.addSkillCandidate(skills, id)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -35,7 +35,7 @@ class SkillView {
 
         try {
             skills = ListSkillsJobVacancy()
-            ids = skillController.addSkillJobVacancy(skills, id)
+            ids = skillService.addSkillJobVacancy(skills, id)
         } catch (Exception e) {
             e.printStackTrace()
         }

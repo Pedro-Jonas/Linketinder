@@ -1,72 +1,92 @@
 package Controllers
 
-import Interfaces.ICandidateDAO
+import Services.CandidateService
+import DAO.CandidateDAO
 import Models.Candidate
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
+import factories.IConnectionFactory
+import factories.PostgresConnectionFactory
 
-class CandidateController {
-    ICandidateDAO candidateDAO
+import javax.servlet.annotation.WebServlet
+import javax.servlet.http.HttpServlet
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
+import java.text.SimpleDateFormat
 
-    CandidateController(ICandidateDAO candidateDAO) {
-        this.candidateDAO = candidateDAO
+
+@WebServlet("/candidates/*")
+class CandidateController extends HttpServlet {
+    private IConnectionFactory connectionDB = PostgresConnectionFactory.getInstance()
+    private CandidateDAO candidateDAO = new CandidateDAO(connectionDB)
+    private CandidateService candidateService = new CandidateService(candidateDAO)
+
+    private Gson gson = new Gson()
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String pathInfo = request.getPathInfo();
+
+        if (pathInfo == null | "/" == pathInfo) {
+            try {
+                List<Candidate> candidates = candidateService.getAllCandidates();
+                String jsonCandidates = gson.toJson(candidates)
+
+                response.setContentType("application/json")
+                response.getWriter().write(jsonCandidates)
+                response.setStatus(HttpServletResponse.SC_OK)
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("Erro ao processar a solicitação: " + e.getMessage())
+            }
+        } else if ("/withSkills" == pathInfo) {
+            try {
+                List<Candidate> candidates = candidateService.getCandidatesWithSkills()
+                String jsonCandidates = gson.toJson(candidates)
+
+                response.setContentType("application/json")
+                response.getWriter().write(jsonCandidates)
+                response.setStatus(HttpServletResponse.SC_OK)
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("Erro ao processar a solicitação: " + e.getMessage())
+            }
+        }
     }
 
-    int addCandidate(Candidate candidate){
-        int id = 0
 
-        try{
-            id = candidateDAO.insertCandidate(candidate)
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            BufferedReader reader = request.getReader()
+            StringBuilder requestBody = new StringBuilder()
+            String line
+            while ((line = reader.readLine()) != null) {
+                requestBody.append(line);
+            }
+
+            JsonObject jsonObject = JsonParser.parseString(requestBody.toString()).getAsJsonObject()
+
+            String dateOfBirthString = jsonObject.get("dateOfBirth").getAsString()
+            Date dateOfBirth = sdf.parse(dateOfBirthString)
+            jsonObject.addProperty("dateOfBirth", dateOfBirth.toString())
+
+            Candidate newCandidate = gson.fromJson(requestBody.toString(), Candidate.class)
+
+            int id = candidateController.addCandidate(newCandidate)
+
+            if (id == 0) {
+                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
+            }
+
+            response.setStatus(HttpServletResponse.SC_CREATED)
+            response.getWriter().write("Candidato com id - ${id} criado com sucesso!")
         } catch (Exception e) {
-            e.printStackTrace()
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Erro ao processar a solicitação: " + e.getMessage())
         }
-
-        return id
-    }
-
-    List<Candidate> getCandidatesWithSkills() {
-        List<Candidate> candidates = new ArrayList<>()
-
-        try{
-            candidates = candidateDAO.selectCandidatesWithSkills()
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return candidates
-    }
-
-    List<Candidate> getAllCandidates() {
-        List<Candidate> candidates = new ArrayList<>()
-
-        try{
-            candidates = candidateDAO.selectAllCandidates()
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return candidates
-    }
-
-    boolean updateCandidate(Candidate candidate, int id) {
-        boolean updateLines = false
-
-        try{
-            updateLines = candidateDAO.updateCandidate(candidate, id)
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return updateLines
-    }
-
-    boolean deleteCandidate(int id) {
-        boolean hasDelete = false
-
-        try{
-            hasDelete = candidateDAO.deleteCandidate(id);
-        } catch (Exception e) {
-            e.printStackTrace()
-        }
-
-        return hasDelete
     }
 }

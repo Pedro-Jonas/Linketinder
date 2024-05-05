@@ -1,6 +1,6 @@
 package Views
 
-import Controllers.JobVacancyController
+import Services.JobVacancyService
 
 import DAO.JobVacancyDAO
 import Models.JobVacancy
@@ -10,7 +10,7 @@ import factories.PostgresConnectionFactory
 class JobVacancyView {
     IConnectionFactory connectionFactory = PostgresConnectionFactory.getInstance()
     JobVacancyDAO jobVacancyDAO = new JobVacancyDAO(connectionFactory)
-    JobVacancyController jobVacanciesController = new JobVacancyController(jobVacancyDAO)
+    JobVacancyService jobVacanciesService = new JobVacancyService(jobVacancyDAO)
 
     SkillView skillView = new SkillView()
 
@@ -20,7 +20,7 @@ class JobVacancyView {
         List<JobVacancy> vacancies = new ArrayList<>()
 
         try{
-            vacancies = jobVacanciesController.getJobVacancies()
+            vacancies = jobVacanciesService.getJobVacancies()
         } catch (Exception e) {
             e.fillInStackTrace()
         }
@@ -38,7 +38,7 @@ class JobVacancyView {
         JobVacancy vacancy = createNewJobVacancy()
 
         try {
-            id = jobVacanciesController.addJobVacancy(vacancy)
+            id = jobVacanciesService.addJobVacancy(vacancy)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -60,7 +60,7 @@ class JobVacancyView {
         JobVacancy vacancy = createNewJobVacancy()
 
         try {
-            updateLines = jobVacanciesController.updateJobVacancy(vacancy, id)
+            updateLines = jobVacanciesService.updateJobVacancy(vacancy, id)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -79,7 +79,7 @@ class JobVacancyView {
         int id = sc.nextInt()
 
         try {
-            hasDelete = jobVacanciesController.deleteJobVacancy(id)
+            hasDelete = jobVacanciesService.deleteJobVacancy(id)
         } catch (Exception e) {
             e.printStackTrace()
         }

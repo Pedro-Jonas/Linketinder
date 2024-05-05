@@ -1,6 +1,6 @@
 package Views
 
-import Controllers.CandidateController
+import Services.CandidateService
 import DAO.CandidateDAO
 
 import Models.Candidate
@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 class CandidateView {
     IConnectionFactory connectionDB = PostgresConnectionFactory.getInstance()
     CandidateDAO candidateDAO = new CandidateDAO(connectionDB)
-    CandidateController candidatesController = new CandidateController(candidateDAO)
+    CandidateService candidatesService = new CandidateService(candidateDAO)
 
     SkillView skillView = new SkillView()
 
@@ -22,7 +22,7 @@ class CandidateView {
         List<Candidate> candidates = new ArrayList<>()
 
         try {
-            candidates = candidatesController.getCandidatesWithSkills()
+            candidates = candidatesService.getCandidatesWithSkills()
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -40,7 +40,7 @@ class CandidateView {
         Candidate candidate = createNewCandidate()
 
         try {
-            id = candidatesController.addCandidate(candidate)
+            id = candidatesService.addCandidate(candidate)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -61,7 +61,7 @@ class CandidateView {
         Candidate candidate = createNewCandidate()
 
         try {
-            updateLines = candidatesController.updateCandidate(candidate, id)
+            updateLines = candidatesService.updateCandidate(candidate, id)
         } catch (Exception e) {
             e.printStackTrace()
         }
@@ -80,7 +80,7 @@ class CandidateView {
         int id = sc.nextInt()
 
         try {
-            hasDelete = candidatesController.deleteCandidate(id)
+            hasDelete = candidatesService.deleteCandidate(id)
         } catch (Exception e) {
             e.printStackTrace()
         }

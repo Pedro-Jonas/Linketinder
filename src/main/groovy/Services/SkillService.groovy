@@ -1,11 +1,11 @@
-package Controllers
+package Services
 
 import Interfaces.ISkillDAO
 
-class SkillController {
+class SkillService {
     ISkillDAO skillDAO
 
-    SkillController(ISkillDAO skillDAO){
+    SkillService(ISkillDAO skillDAO){
         this.skillDAO = skillDAO
     }
 

@@ -1,12 +1,12 @@
-package Controllers
+package Services
 
 import Interfaces.ICompanyDAO
 import Models.Company
 
-class CompanyController {
+class CompanyService {
     ICompanyDAO companyDAO
 
-    CompanyController(ICompanyDAO companyDAO) {
+    CompanyService(ICompanyDAO companyDAO) {
         this.companyDAO = companyDAO
     }
 
