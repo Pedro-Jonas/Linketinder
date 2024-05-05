@@ -22,11 +22,23 @@ class JobVacancyService {
         return id
     }
 
-    List<JobVacancy> getJobVacancies() {
+    List<JobVacancy> getAllJobVacancies() {
         List<JobVacancy> vacancies = new ArrayList<>()
 
         try {
-            vacancies = jobVacancyDAO.selectJobVacancies()
+            vacancies = jobVacancyDAO.selectAllJobVacancies()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return vacancies
+    }
+
+    List<JobVacancy> getJobVacanciesWithSkills() {
+        List<JobVacancy> vacancies = new ArrayList<>()
+
+        try {
+            vacancies = jobVacancyDAO.selectJobVacanciesWithSkills()
         } catch (Exception e) {
             e.printStackTrace()
         }

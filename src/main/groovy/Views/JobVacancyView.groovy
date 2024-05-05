@@ -20,7 +20,7 @@ class JobVacancyView {
         List<JobVacancy> vacancies = new ArrayList<>()
 
         try{
-            vacancies = jobVacanciesService.getJobVacancies()
+            vacancies = jobVacanciesService.getJobVacanciesWithSkills()
         } catch (Exception e) {
             e.fillInStackTrace()
         }

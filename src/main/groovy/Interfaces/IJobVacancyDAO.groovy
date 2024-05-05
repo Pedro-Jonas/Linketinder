@@ -1,14 +1,15 @@
 package Interfaces
 
-import Models.Company
 import Models.JobVacancy
 
 import java.sql.ResultSet
 
 interface IJobVacancyDAO {
     int insertJobVacancy(JobVacancy jobVacancy)
-    List<JobVacancy> selectJobVacancies()
+    List<JobVacancy> selectAllJobVacancies()
+    List<JobVacancy> selectJobVacanciesWithSkills()
     boolean updateJobVacancy(JobVacancy jobVacancy, int id)
     boolean deleteJobVacancy(int id)
-    List<Company> listJobVacancies(ResultSet result)
+    List<JobVacancy> listJobVacancies(ResultSet result)
+    List<JobVacancy> listJobVacanciesWithSkills(ResultSet result)
 }

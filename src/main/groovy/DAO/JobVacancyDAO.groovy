@@ -41,7 +41,6 @@ class JobVacancyDAO implements IJobVacancyDAO{
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
-            connection.close()
             stm.close()
         }
 
@@ -49,7 +48,30 @@ class JobVacancyDAO implements IJobVacancyDAO{
     }
 
     @Override
-    List<JobVacancy> selectJobVacancies() {
+    List<JobVacancy> selectAllJobVacancies() {
+        PreparedStatement stm = null
+        List<JobVacancy> vacancies = new ArrayList<>()
+
+        String selectAllJobVacancies = "SELECT * FROM job_vacancies;"
+
+        try {
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(selectAllJobVacancies)
+
+            ResultSet result = stm.executeQuery()
+
+            vacancies = listJobVacancies(result)
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            stm.close()
+        }
+
+        return vacancies
+    }
+
+    @Override
+    List<JobVacancy> selectJobVacanciesWithSkills() {
         PreparedStatement stm = null
         List<JobVacancy> vacancies = new ArrayList<>()
 
@@ -60,13 +82,13 @@ class JobVacancyDAO implements IJobVacancyDAO{
                 "ON jsk.skill_id = sk.id " +
                 "GROUP BY jv.id;"
 
-        try{
+        try {
             Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(selectJobVacanciesWithSkills)
 
             ResultSet result = stm.executeQuery()
 
-            vacancies = listJobVacancies(result)
+            vacancies = listJobVacanciesWithSkills(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
@@ -144,8 +166,28 @@ class JobVacancyDAO implements IJobVacancyDAO{
         while (result.next()) {
             JobVacancy vacancy = new JobVacancy()
 
-            Array array = result.getArray("skills");
-            String[] skills = (String[]) array.getArray();
+            vacancy.setId(result.getInt("id"))
+            vacancy.setCompanyId(result.getInt("company_id"))
+            vacancy.setName(result.getString("name"))
+            vacancy.setDescription(result.getString("description"))
+            vacancy.setState(result.getString("state"))
+            vacancy.setCity(result.getString("city"))
+
+            vacancies.add(vacancy)
+        }
+
+        return vacancies
+    }
+
+    @Override
+    List<JobVacancy> listJobVacanciesWithSkills(ResultSet result) {
+        List<JobVacancy> vacancies = new ArrayList<>()
+
+        while (result.next()) {
+            JobVacancy vacancy = new JobVacancy()
+
+            Array array = result.getArray("skills")
+            String[] skills = (String[]) array.getArray()
 
             vacancy.setId(result.getInt("id"))
             vacancy.setCompanyId(result.getInt("company_id"))

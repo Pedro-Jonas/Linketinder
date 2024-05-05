@@ -9,7 +9,7 @@ class SkillServiceTest {
     SkillService skillService = new SkillService(skillDAO)
 
     @Test
-    void addSkillCandidate() {
+    void addSkillCandidateTest() {
         //given
         List<String> skills = new ArrayList<>()
         List<Integer> ids = new ArrayList<>()
@@ -27,7 +27,7 @@ class SkillServiceTest {
     }
 
     @Test
-    void addSkillJobVacancy() {
+    void addSkillJobVacancyTest() {
         //given
         List<String> skills = new ArrayList<>()
         List<Integer> ids = new ArrayList<>()

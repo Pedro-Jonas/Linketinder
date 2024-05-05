@@ -16,17 +16,27 @@ class JobVacancyServiceTest {
         List<JobVacancy> jobVacancies = new ArrayList<>()
         JobVacancy jobVacancy = new JobVacancy()
 
-        jobVacancy.setCompanyId(1)
-        jobVacancy.setName("Empresa1")
-        jobVacancy.setDescription("Descrição")
-        jobVacancy.setState("Estado1")
-        jobVacancy.setCity("Cidade1")
+        jobVacancies.add(jobVacancy)
+
+        when(jobVacancyDAO.selectAllJobVacancies()).thenReturn(jobVacancies)
+        //when
+        List<JobVacancy> result = jobVacancyService.getAllJobVacancies()
+
+        //then
+        assertEquals(jobVacancies, result)
+    }
+
+    @Test
+    void getCompaniesWithSkillsTest() {
+        //given
+        List<JobVacancy> jobVacancies = new ArrayList<>()
+        JobVacancy jobVacancy = new JobVacancy()
 
         jobVacancies.add(jobVacancy)
 
-        when(jobVacancyDAO.selectJobVacancies()).thenReturn(jobVacancies)
+        when(jobVacancyDAO.selectJobVacanciesWithSkills()).thenReturn(jobVacancies)
         //when
-        List<JobVacancy> result = jobVacancyService.getJobVacancies()
+        List<JobVacancy> result = jobVacancyService.getJobVacanciesWithSkills()
 
         //then
         assertEquals(jobVacancies, result)

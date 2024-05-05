@@ -12,7 +12,7 @@ class CandidateServiceTest {
 
 
     @Test
-    void getAllCandidates() {
+    void getAllCandidatesTest() {
         //given
         List<Candidate> candidates = new ArrayList<>()
 
