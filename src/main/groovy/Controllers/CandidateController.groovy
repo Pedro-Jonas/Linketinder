@@ -76,7 +76,7 @@ class CandidateController extends HttpServlet {
 
             Candidate newCandidate = gson.fromJson(requestBody.toString(), Candidate.class)
 
-            int id = candidateController.addCandidate(newCandidate)
+            int id = candidateService.addCandidate(newCandidate)
 
             if (id == 0) {
                 response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE)
