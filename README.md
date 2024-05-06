@@ -12,7 +12,7 @@ DB Designer
 3. Execulte
 ```bash
 gradle build
-```~]1ç 
+```
 4. Enfim execulte
 ```bash
 gradle run
@@ -26,4 +26,81 @@ gradle run
 - Para facilitar a integração de bancos de dados diferentes sem quebrar a apliação
 6. Adoção do padrão Singleton
 - Garantindo que existe apenas uma conexão com o banco de dados e que seja instaciada a partir da mesma
+
+## EndPoints da API
+### Foi utilizado o TomCat e Servlets para implementação da API
+
+1. Listagem de candidatos
+- GET para http://localhost:8080/Linketinder/candidates
+2. Listagem de candidatos com Habilidades
+- GET para http://localhost:8080/Linketinder/candidates/withSkills
+3. Cadastro de candidatos
+- POST para http://localhost:8080/Linketinder/candidates
+- Body exemplo
+```bash
+{
+  "firstName": "Teste",
+  "lastName": "Teste",
+  "dateOfBirth": "1999-12-12",
+  "cpf": "111.111.111-11",
+  "email": "teste@gmail.com",
+  "country": "Teste",
+  "cep": "11111-111",
+  "description": "teste",
+  "password": "test1111"
+}
+```
+4. Listagem de empresas
+- GET para http://localhost:8080/Linketinder/companies
+5. Cadastro de empresas
+- POST para http://localhost:8080/Linketinder/companies
+- Body exemplo
+```bash
+{
+  "name": "teste",
+  "cnpj": "11.111.111/1111-11",
+  "email": "teste@gmail.com",
+  "country": "Teste",
+  "cep": "11111-111",
+  "description": "Teste",
+  "password": "Teste1111"
+}
+```
+6. Listagem de Vagas
+- GET para http://localhost:8080/Linketinder/jobVacancies
+7. Listagem de Vagas com Habilidades
+- GET para http://localhost:8080/Linketinder/jobVacancies/withSkills
+8. Cadastro de vagas
+- POST para http://localhost:8080/Linketinder/jobVacancies
+- Body exemplo
+```bash
+{
+  "name": "Teste",
+  "state": "Teste",
+  "city": "Teste",
+  "description": "Teste",
+  "companyId": 1
+}
+```
+9. Listagem de hablidades
+- GET para http://localhost:8080/Linketinder/skills
+10. cadastro de habilidades do candidato
+- POST para http://localhost:8080/Linketinder/skills/candidates
+- Body exemplo
+```bash
+{
+  "candidateId": 1,
+  "name": "Teste"
+}
+```
+11. Cadastro de habilidades da vaga
+- POST para http://localhost:8080/Linketinder/skills/companies
+- Body exemplo
+```bash
+{
+  "jobVacancyId": 1,
+  "name": "Teste"
+}
+```
+
 <!-- Pedro Jonas Nunes de Araújo -->

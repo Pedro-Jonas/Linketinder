@@ -52,8 +52,8 @@ class SkillController extends HttpServlet {
         if (pathInfo =="/candidates") {
             try {
                 JsonObject jsonObject = JsonParser.parseString(requestBody.toString()).getAsJsonObject()
-                String name = jsonObject.get("name").getAsString()
                 int candidateId = jsonObject.get("candidateId").getAsInt()
+                String name = jsonObject.get("name").getAsString()
 
                 Skill skill = new Skill()
                 skill.setName(name)
@@ -73,8 +73,8 @@ class SkillController extends HttpServlet {
         } else if (pathInfo == "/companies") {
             try {
                 JsonObject jsonObject = JsonParser.parseString(requestBody.toString()).getAsJsonObject()
-                String name = jsonObject.get("name").getAsString()
                 int jobVacancyId = jsonObject.get("jobVacancyId").getAsInt()
+                String name = jsonObject.get("name").getAsString()
 
                 Skill skill = new Skill()
                 skill.setName(name)
