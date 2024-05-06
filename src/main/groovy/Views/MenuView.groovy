@@ -5,6 +5,7 @@ class MenuView {
     CandidateView candidateView = new CandidateView()
     CompanyView companyView = new CompanyView()
     JobVacancyView jobVacancyView = new JobVacancyView()
+    SkillView skillView = new SkillView()
 
     Scanner sc = new Scanner(System.in)
 
@@ -21,6 +22,8 @@ class MenuView {
     10 para  atualizar uma vaga
     11 para listar todas as vagas
     12 para deletar uma vaga
+    13 para inserir uma habilidade de candidato
+    14 para inserir uma habilidade de vaga
     0 para encerrar
     __________________________________"""
 
@@ -66,6 +69,12 @@ class MenuView {
                     break
                 case 12:
                     jobVacancyView.deleteJobVacancy()
+                    break
+                case 13:
+                    skillView.addSkillsCandidate()
+                    break
+                case 14:
+                    skillView.addSkillsJobVacancy()
                     break
                 default:
                     println "Digite uma opção válida"

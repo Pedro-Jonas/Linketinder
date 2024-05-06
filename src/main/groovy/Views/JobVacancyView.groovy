@@ -12,7 +12,6 @@ class JobVacancyView {
     JobVacancyDAO jobVacancyDAO = new JobVacancyDAO(connectionFactory)
     JobVacancyService jobVacanciesService = new JobVacancyService(jobVacancyDAO)
 
-    SkillView skillView = new SkillView()
 
     Scanner sc = new Scanner(System.in)
 
@@ -46,7 +45,6 @@ class JobVacancyView {
         if (id == 0) {
             println "Falha ao inserir vaga!"
         } else {
-            skillView.createSkillsJobVacancy(id)
             println "Vaga com id - ${id} inserida com sucesso!"
         }
 

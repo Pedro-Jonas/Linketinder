@@ -1,3 +1,4 @@
+import Models.Skill
 import Services.SkillService
 import Interfaces.ISkillDAO
 import org.junit.jupiter.api.*
@@ -11,36 +12,47 @@ class SkillServiceTest {
     @Test
     void addSkillCandidateTest() {
         //given
-        List<String> skills = new ArrayList<>()
-        List<Integer> ids = new ArrayList<>()
+        Skill skill = new Skill()
+        skill.setName("Test")
 
-        skills.add("Groovy")
-
-        ids.add(1)
-
-        when(skillDAO.insertSkillCandidate(1, "Groovy" )).thenReturn(1)
+        when(skillDAO.insertSkillCandidate(1, skill.name)).thenReturn(1)
         //when
-        List<Integer> result = skillService.addSkillCandidate(skills, 1)
+        int result = skillService.addSkillCandidate(skill, 1)
 
         //then
-        assertEquals(ids, result)
+        assertEquals(1, result)
     }
 
     @Test
-    void addSkillJobVacancyTest() {
+    void  addSkillJobVacancyTest() {
         //given
-        List<String> skills = new ArrayList<>()
-        List<Integer> ids = new ArrayList<>()
+        Skill skill = new Skill()
+        skill.setName("Test")
 
-        skills.add("Groovy")
-
-        ids.add(1)
-
-        when(skillDAO.insertSkillJobVacancy(1, "Groovy" )).thenReturn(1)
+        when(skillDAO.insertSkillJobVacancy(1, skill.name)).thenReturn(1)
         //when
-        List<Integer> result = skillService.addSkillJobVacancy(skills, 1)
+        int result = skillService.addSkillJobVacancy(skill, 1)
 
         //then
-        assertEquals(ids, result)
+        assertEquals(1, result)
     }
+
+    @Test
+    void getSkillsTest() {
+        //given
+        List<Skill> skills = new ArrayList<>()
+
+        Skill skill = new Skill()
+
+        skills.add(skill)
+
+        when(skillDAO.selectSkills()).thenReturn(skills)
+        //when
+        List<Skill> result = skillService.getSkills()
+
+        //then
+        assertEquals(skills, result)
+    }
+
+
 }

@@ -11,6 +11,19 @@ class CompanyServiceTest {
     CompanyService companyService = new CompanyService(companyDAO)
 
     @Test
+    void addCompanyTest() {
+        //given
+        Company company = new Company()
+        when(companyDAO.insertCompany(company)).thenReturn(1)
+
+        //when
+        int result = companyService.addCompany(company)
+
+        //then
+        assertEquals(1, result)
+    }
+
+    @Test
     void getCompaniesTest() {
         //given
         List<Company> companies = new ArrayList<>()
@@ -27,18 +40,6 @@ class CompanyServiceTest {
         assertEquals(companies, result)
     }
 
-    @Test
-    void addCompanyTest() {
-        //given
-        Company company = new Company()
-        when(companyDAO.insertCompany(company)).thenReturn(1)
-
-        //when
-        int result = companyService.addCompany(company)
-
-        //then
-        assertEquals(1, result)
-    }
 
     @Test
     void updateCompanyTest() {

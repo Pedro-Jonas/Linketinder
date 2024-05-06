@@ -14,8 +14,6 @@ class CandidateView {
     CandidateDAO candidateDAO = new CandidateDAO(connectionDB)
     CandidateService candidatesService = new CandidateService(candidateDAO)
 
-    SkillView skillView = new SkillView()
-
     Scanner sc = new Scanner(System.in)
 
     void showCandidates() {
@@ -48,7 +46,6 @@ class CandidateView {
         if (id == 0) {
             println "Falha ao inserir candidato!"
         } else {
-            skillView.createSkillsCandidate(id)
             println "Candidado com id - ${id} inserido com sucesso!"
         }
     }

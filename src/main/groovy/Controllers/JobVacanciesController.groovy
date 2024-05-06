@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @WebServlet("/jobVacancies/*")
-class jobVacanciesController extends HttpServlet {
+class JobVacanciesController extends HttpServlet {
     private IConnectionFactory connectionDB = PostgresConnectionFactory.getInstance()
     private JobVacancyDAO jobVacancyDAO = new JobVacancyDAO(connectionDB)
     private JobVacancyService jobVacancyService = new JobVacancyService(jobVacancyDAO)

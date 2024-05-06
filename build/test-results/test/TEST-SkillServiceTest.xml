@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="SkillServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-05-06T13:27:21" hostname="pedrojonas-ubunto" time="0.092">
+  <properties/>
+  <testcase name="getSkillsTest()" classname="SkillServiceTest" time="0.092"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

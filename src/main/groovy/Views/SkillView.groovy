@@ -1,5 +1,6 @@
 package Views
 
+import Models.Skill
 import Services.SkillService
 
 import DAO.SkillDAO
@@ -11,70 +12,64 @@ class SkillView {
     SkillDAO skillDAO = new SkillDAO(connectionDB)
     SkillService skillService = new SkillService(skillDAO)
 
-    void createSkillsCandidate(int id) {
-        List<String> skills = new ArrayList<>()
-        List<Integer> ids = new ArrayList<>()
+    void addSkillsCandidate() {
+        Scanner sc = new Scanner(System.in)
+
+        System.out.println "Digite a id do candidato"
+        int candidateId = sc.nextInt()
+
+        int skillId = 0
 
         try {
-            skills = ListSkillsJobVacancy()
-            ids = skillService.addSkillCandidate(skills, id)
+            Skill skill = createNewSkill()
+            skillId = skillService.addSkillCandidate(skill, candidateId)
         } catch (Exception e) {
             e.printStackTrace()
         }
 
-        if (skills.size() == ids.size() && ids != null) {
-            println "Skills inseridas com sucesso!"
+        if (skillId != 0) {
+            println "Skill inserida com sucesso!"
         } else {
-            println "Falha ao inserir skills!"
+            println "Falha ao inserir skill!"
         }
     }
 
-    void createSkillsJobVacancy(int id) {
-        List<String> skills = new ArrayList<>()
-        List<Integer> ids = new ArrayList<>()
+    void addSkillsJobVacancy() {
+        Scanner sc = new Scanner(System.in)
+
+        System.out.println "Digite a id da vaga"
+        int jobVacancyId = sc.nextInt()
+
+        int skillId = 0
 
         try {
-            skills = ListSkillsJobVacancy()
-            ids = skillService.addSkillJobVacancy(skills, id)
+            Skill skill = createNewSkill()
+            skillId = skillService.addSkillJobVacancy(skill, jobVacancyId)
         } catch (Exception e) {
             e.printStackTrace()
         }
 
-        if (skills.size() == ids.size() && ids != null) {
-            println "Skills inseridas com sucesso!"
+        if (skillId != 0) {
+            println "Skill inserida com sucesso!"
         } else {
-            println "Falha ao inserir skills!"
+            println "Falha ao inserir skill!"
         }
     }
 
-    private static List<String> ListSkillsJobVacancy() {
-        List<String> skills = new ArrayList<>()
+    private static Skill createNewSkill() {
+        Scanner sc = new Scanner(System.in)
 
-        String text = "Digite a opção desejada: \n" +
-                "1 para inserir mais uma habilidade \n" +
-                "0 para parar a inserção \n"
+        System.out.println "Digite a sua habilidade"
+        String skillName = sc.nextLine()
 
-        int op = 1;
+        Skill skill = new Skill()
 
-
-        while (op != 0) {
-            Scanner sc = new Scanner(System.in)
-
-            switch (op){
-                case 1:
-                    System.out.println "Digite a sua habilidade"
-                    String skill = sc.nextLine()
-
-                    skills.add(skill)
-                    break
-                default:
-                    println "Digite uma opção válida"
-                    break
-            }
-            println text
-            op = sc.nextInt()
+        try {
+            skill.setName(skillName)
+        } catch (Exception e) {
+            e.printStackTrace()
         }
 
-        return  skills
+        return  skill
     }
 }

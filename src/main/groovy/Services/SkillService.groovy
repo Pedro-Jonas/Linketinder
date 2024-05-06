@@ -1,6 +1,7 @@
 package Services
 
 import Interfaces.ISkillDAO
+import Models.Skill
 
 class SkillService {
     ISkillDAO skillDAO
@@ -9,34 +10,41 @@ class SkillService {
         this.skillDAO = skillDAO
     }
 
-    List<Integer> addSkillCandidate(List<String> skills, int id) {
-         List<Integer> ids = new ArrayList<>()
+    int addSkillCandidate(Skill skill, int candidateId) {
+         int skillId = 0
 
-        skills.each { skill ->
-            try {
-                int skillId = skillDAO.insertSkillCandidate(id, skill)
-                ids.add(skillId)
 
-            } catch (Exception e) {
-                e.printStackTrace()
-            }
+        try {
+            skillId = skillDAO.insertSkillCandidate(candidateId, skill.name)
+
+        } catch (Exception e) {
+            e.printStackTrace()
         }
 
-        return ids
+        return skillId
     }
 
-    List<Integer> addSkillJobVacancy(List<String> skills, int id) {
-        List<Integer> ids = new ArrayList<>()
+    int addSkillJobVacancy(Skill skill, int jobVacancyId) {
+        int skillId = 0
 
-        skills.each { skill ->
-            try {
-                int skillId = skillDAO.insertSkillJobVacancy(id, skill)
-                ids.add(skillId)
-            } catch (Exception e) {
+        try {
+            skillId = skillDAO.insertSkillJobVacancy(jobVacancyId, skill.name)
+        } catch (Exception e) {
                 e.printStackTrace()
-            }
         }
 
-        return ids
+        return skillId
+    }
+
+    List<Skill> getSkills() {
+        List<Skill> skills = new ArrayList<>()
+
+        try{
+            skills = skillDAO.selectSkills()
+        } catch (Exception e) {
+            e.printStackTrace()
+        }
+
+        return skills
     }
 }

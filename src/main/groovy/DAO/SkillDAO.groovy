@@ -2,6 +2,7 @@ package DAO
 
 
 import Interfaces.ISkillDAO
+import Models.Skill
 import factories.IConnectionFactory
 
 import java.sql.*
@@ -14,7 +15,7 @@ class SkillDAO implements ISkillDAO {
     }
 
     @Override
-    int insertSkill(String skill) {
+    int insertSkill(String skillName) {
         PreparedStatement stm = null
         int skillId = 0
 
@@ -24,7 +25,7 @@ class SkillDAO implements ISkillDAO {
             Connection connection = connectionDB.getConnection()
             stm = connection.prepareStatement(insertSkill, Statement.RETURN_GENERATED_KEYS)
 
-            stm.setString(1, skill)
+            stm.setString(1, skillName)
 
             stm.execute()
             ResultSet rs = stm.getGeneratedKeys()
@@ -42,11 +43,69 @@ class SkillDAO implements ISkillDAO {
     }
 
     @Override
+    int insertSkillCandidate(int candidateId, String skillName) {
+        PreparedStatement stm = null
+
+        int  skillId = this.selectSkillByName(skillName)
+
+        if(skillId == 0) {
+            skillId = this.insertSkill(skillName)
+        }
+
+        String insertSkillCandidate = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
+
+        try {
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(insertSkillCandidate)
+
+            stm.setInt(1, candidateId)
+            stm.setInt(2, skillId)
+
+            stm.executeUpdate()
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            stm.close()
+        }
+
+        return skillId
+    }
+
+    @Override
+    int insertSkillJobVacancy(int jobVacancyId, String skillName) {
+        PreparedStatement stm = null
+
+        int skillId = this.selectSkillByName(skillName)
+
+        if (skillId == 0){
+            skillId = this.insertSkill(skillName)
+        }
+
+        String insertSkillJobVacancy = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
+
+        try {
+            Connection connection = connectionDB.getConnection()
+            stm = connection.prepareStatement(insertSkillJobVacancy)
+
+            stm.setInt(1, jobVacancyId)
+            stm.setInt(2, skillId)
+
+            stm.executeUpdate()
+        } catch (SQLException e) {
+            e.printStackTrace()
+        } finally {
+            stm.close()
+        }
+
+        return skillId
+    }
+
+    @Override
     int selectSkillByName(String skill) {
         PreparedStatement stm = null
         int skillId = 0
 
-        String selectSkillByName = "SELECT * FROM skill sk WHERE sk.name = ?";
+        String selectSkillByName = "SELECT * FROM skill sk WHERE sk.name = ?;"
 
         try {
             Connection connection = connectionDB.getConnection()
@@ -68,60 +127,40 @@ class SkillDAO implements ISkillDAO {
     }
 
     @Override
-    int insertSkillCandidate(int id, String skill) {
+    List<Skill> selectSkills() {
         PreparedStatement stm = null
+        List<Skill> skills = new ArrayList<>()
 
-        int  skillId = this.selectSkillByName(skill)
-
-        if(skillId == 0) {
-            skillId = this.insertSkill(skill)
-        }
-
-        String insertSkillCandidate = "INSERT INTO candidate_skill (candidate_id, skill_id) VALUES (?,?);"
+        String selectSkillByName = "SELECT * FROM skill;"
 
         try {
             Connection connection = connectionDB.getConnection()
-            stm = connection.prepareStatement(insertSkillCandidate)
+            stm = connection.prepareStatement(selectSkillByName)
 
-            stm.setInt(1, id)
-            stm.setInt(2, skillId)
+            ResultSet result = stm.executeQuery()
 
-            stm.executeUpdate()
+            skills = this.listSkills(result)
         } catch (SQLException e) {
             e.printStackTrace()
         } finally {
             stm.close()
         }
 
-        return skillId
+        return  skills
     }
 
     @Override
-    int insertSkillJobVacancy(int id, String skill) {
-        PreparedStatement stm = null
+    List<Skill> listSkills(ResultSet result) {
+        List<Skill> skills = new ArrayList<>()
+        while (result.next()) {
+            Skill skill = new Skill()
 
-        int skillId = this.selectSkillByName(skill)
+            skill.setId(result.getInt("id"))
+            skill.setName(result.getString("name"))
 
-        if (skillId == 0){
-            skillId = this.insertSkill(skill)
+            skills.add(skill)
         }
 
-        String insertSkillJobVacancy = "INSERT INTO job_vacancies_skill (job_vacancy_id, skill_id) VALUES (?,?);"
-
-        try {
-            Connection connection = connectionDB.getConnection()
-            stm = connection.prepareStatement(insertSkillJobVacancy)
-
-            stm.setInt(1, id)
-            stm.setInt(2, skillId)
-
-            stm.executeUpdate()
-        } catch (SQLException e) {
-            e.printStackTrace()
-        } finally {
-            stm.close()
-        }
-
-        return skillId
+        return skills
     }
 }
