@@ -17,6 +17,8 @@ gradle build
 ```bash
 gradle run
 ```
+5. Para iniciar o sevidor rode a aplicação com o TomCat
+
 ## Melhorias de Refatorção
 1. Criação de Testes
 2. Criação de Interfaces
